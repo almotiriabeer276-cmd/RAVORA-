@@ -18,6 +18,9 @@
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-block:25px}.stat{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:19px;min-height:145px}.stat span{color:#d9c5e7;font-size:14px}.stat strong{display:block;color:var(--gold);font-size:clamp(30px,5vw,42px);margin-top:8px;font-variant-numeric:tabular-nums;line-height:1.4}.stat small{display:block;margin-top:2px}
     .card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px;margin-block:20px}.notice{padding:16px;border:1px solid #806494;background:#2c1d3b;border-radius:12px;white-space:pre-line;overflow-wrap:anywhere}.notice.error{color:var(--red);background:#462636;border-color:#965d71}.notice.success{color:var(--green);background:#173a31;border-color:#44856d}.list{margin:0;padding-inline-start:23px;color:var(--muted)}.list li{margin-block:8px}
     .placeholder{color:#b8a7c4;font-size:13px;border:1px dashed #74578c;padding:12px;border-radius:10px}.muted{color:var(--muted)}
+    .subscription-controls{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1.3fr auto;align-items:end;gap:10px;padding-top:12px;border-top:1px solid #ffffff28}.subscription-controls label{font-size:12px;color:var(--muted);display:grid;gap:4px}.subscription-controls select,.subscription-controls input{width:100%;min-width:0;border:1px solid #846a9c;background:#1a1227;color:#fff;border-radius:9px;padding:9px;font:inherit;direction:rtl}.subscription-controls input{direction:ltr;color-scheme:dark}.subscription-feedback{grid-column:1/-1;font-size:12px;min-height:1.5em;color:var(--muted)}.subscription-feedback.error{color:var(--red)}.subscription-feedback.success{color:var(--green)}
+    @media(max-width:700px){.subscription-controls{grid-template-columns:1fr 1fr}.subscription-controls .btn{grid-column:1/-1}}
+    @media(max-width:420px){.subscription-controls{grid-template-columns:1fr}}
     .section-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:13px}.section-head h2{margin:0}.search{width:min(100%,370px);padding:11px 14px;border:1px solid #846a9c;border-radius:12px;color:var(--text);background:#181024;font:inherit;direction:rtl}.search:focus{outline:2px solid var(--purple);outline-offset:2px}.merchant-list{display:grid;gap:11px}.merchant{border:1px solid #634b7a;background:var(--panel2);border-radius:14px;padding:15px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px}.merchant-name{font-size:17px;font-weight:bold;color:var(--gold);overflow-wrap:anywhere}.merchant-email{font-size:13px;color:#d2c5dc;overflow-wrap:anywhere;direction:ltr;text-align:right}.merchant-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.metric{background:#49335c;padding:4px 10px;border-radius:8px;font-size:13px}.merchant-date{color:var(--muted);font-size:12px}.row-status{color:var(--muted);margin:9px 0}.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:17px}
     footer{border-top:1px solid #ffffff1a;text-align:center;padding:20px;color:var(--muted);font-size:12px}
     @media(max-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding-inline:14px}.bar{align-items:flex-start}.stat{padding:14px;min-height:120px}.card{padding:17px}}
@@ -32,7 +35,7 @@
 </div></header>
 <main class="wrap">
   <div class="top">
-    <div><span class="chip">لإدارة المنصة فقط</span><h1>لوحة إدارة رافورا</h1><p>إحصائيات المنصة وقائمة التجار المسجلين، خاصة بحساب الإدارة.</p></div>
+    <div><span class="chip">لإدارة المنصة فقط</span><h1>لوحة إدارة رافورا</h1><p>إحصائيات المنصة، التجار وإدارة باقات الاشتراك، خاصة بحساب الإدارة.</p></div>
     <div><small id="account"></small><div><small id="updated"></small></div></div>
   </div>
   <div id="message" class="notice" role="status" aria-live="polite">جارٍ التأكد من حساب الإدارة وتحميل الإحصائيات...</div>
@@ -46,7 +49,7 @@
     </section>
     <section class="card" aria-labelledby="merchants-title">
       <div class="section-head">
-        <div><h2 id="merchants-title">قائمة التجار</h2><p>أحدث 100 حساب تاجر، مع عدد المسابقات والمشاركين لكل متجر.</p></div>
+        <div><h2 id="merchants-title">قائمة التجار</h2><p>أحدث 100 حساب تاجر؛ يمكنك تعديل الباقة وحالة الاشتراك وتاريخ انتهائه لكل متجر.</p></div>
         <input id="merchantSearch" class="search" type="search" placeholder="ابحثي باسم المتجر أو البريد الإلكتروني" aria-label="البحث في التجار المعروضين" autocomplete="off">
       </div>
       <p id="merchantStatus" class="row-status" role="status" aria-live="polite">جاري تحميل قائمة التجار...</p>
@@ -56,7 +59,7 @@
         <small id="merchantPageLabel"></small>
         <button class="btn" id="nextMerchants" type="button">التالي</button>
       </div>
-      <div class="placeholder" style="margin-top:14px">البحث هنا ضمن أحدث 100 تاجر يعيدهم النظام. إدارة تفعيل التجار والاشتراكات ستُضاف لاحقًا بعد ضبط صلاحياتها؛ لا توجد أزرار حذف أو إيقاف في هذه النسخة.</div>
+      <div class="placeholder" style="margin-top:14px">يمكنك التحكم في سجل الاشتراك فقط. تعليق الاشتراك لا يمنع تسجيل دخول التاجر أو إنشاء المسابقات بعد؛ سنفعّل حدود الباقات في النظام كخطوة مستقلة، ولا توجد عملية تحصيل دفع في هذه النسخة.</div>
     </section>
     <section class="card">
       <h2>خصوصية وحماية البيانات</h2>
@@ -121,10 +124,68 @@ window.addEventListener('DOMContentLoaded',async()=>{
       const contestCount=document.createElement('span');contestCount.className='metric';contestCount.textContent='المسابقات: '+numberText(merchant.contests);
       const participantCount=document.createElement('span');participantCount.className='metric';participantCount.textContent='المشاركات: '+numberText(merchant.participants);
       info.append(contestCount,participantCount);
+      const planLabel={free:'مجانية',premium_monthly:'شهرية',premium_annual:'سنوية'};
+      const planTag=document.createElement('span');planTag.className='metric';planTag.textContent='الباقة: '+(planLabel[merchant.plan]||'غير محددة');
+      const statusTag=document.createElement('span');statusTag.className='metric';
+      const expired=merchant.subscription_ends_at && new Date(merchant.subscription_ends_at).getTime()<=Date.now();
+      statusTag.textContent='الاشتراك: '+(merchant.subscription_status==='suspended'?'معلّق':expired?'منتهي':'نشط');
+      info.append(planTag,statusTag);
       const date=document.createElement('div');date.className='merchant-date';
       const d=merchant.created_at?new Date(merchant.created_at):null;
       date.textContent=d && !Number.isNaN(d.getTime())?'تاريخ التسجيل: '+d.toLocaleDateString('ar-SA'):'';
-      item.append(identity,info,date);target.append(item);
+      const editor=document.createElement('div');editor.className='subscription-controls';
+      const field=(title,control)=>{const lbl=document.createElement('label');lbl.textContent=title;lbl.append(control);return lbl;};
+      const plan=document.createElement('select');
+      for(const [value,title] of [['free','مجانية'],['premium_monthly','شهرية'],['premium_annual','سنوية']]){
+        const opt=document.createElement('option');opt.value=value;opt.textContent=title;plan.append(opt);
+      }
+      plan.value=merchant.plan||'free';
+      const status=document.createElement('select');
+      for(const [value,title] of [['active','نشط'],['suspended','معلّق']]){
+        const opt=document.createElement('option');opt.value=value;opt.textContent=title;status.append(opt);
+      }
+      status.value=merchant.subscription_status||'active';
+      const end=document.createElement('input');end.type='datetime-local';end.setAttribute('aria-label','تاريخ انتهاء الاشتراك');
+      function localInputValue(date){const d=new Date(date.getTime()-date.getTimezoneOffset()*60000);return d.toISOString().slice(0,16);}
+      function recommendedEnd(p){const d=new Date();d.setDate(d.getDate()+(p==='premium_annual'?365:30));return localInputValue(d);}
+      if(merchant.subscription_ends_at && !Number.isNaN(new Date(merchant.subscription_ends_at).getTime())){
+        end.value=localInputValue(new Date(merchant.subscription_ends_at));
+      }
+      function synchronizeEnd(auto=false){
+        end.disabled=plan.value==='free';
+        if(end.disabled)end.value='';
+        else if(!end.value || auto)end.value=recommendedEnd(plan.value);
+      }
+      synchronizeEnd();
+      plan.addEventListener('change',()=>synchronizeEnd(true));
+      const save=document.createElement('button');save.type='button';save.className='btn primary';save.textContent='حفظ الاشتراك';
+      const feedback=document.createElement('div');feedback.className='subscription-feedback';feedback.setAttribute('role','status');
+      save.addEventListener('click',async()=>{
+        if(!authorized)return;
+        const endsAt=plan.value==='free'?null:end.value?new Date(end.value):null;
+        if(plan.value!=='free' && (!endsAt || Number.isNaN(endsAt.getTime()) || endsAt.getTime()<=Date.now())){
+          feedback.textContent='حددي تاريخ انتهاء مستقبليًا للباقة المدفوعة.';feedback.className='subscription-feedback error';return;
+        }
+        if(!window.confirm('تأكيد تحديث اشتراك '+(merchant.store_name||'المتجر')+'؟'))return;
+        save.disabled=true;feedback.textContent='جارٍ حفظ التعديل...';feedback.className='subscription-feedback';
+        try{
+          const {error}=await client.rpc('admin_update_subscription',{
+            p_merchant_id:merchant.id,
+            p_plan:plan.value,
+            p_status:status.value,
+            p_ends_at:endsAt?endsAt.toISOString():null
+          });
+          if(error)throw error;
+          merchant.plan=plan.value;merchant.subscription_status=status.value;
+          merchant.subscription_ends_at=endsAt?endsAt.toISOString():null;
+          planTag.textContent='الباقة: '+(planLabel[merchant.plan]||'غير محددة');
+          statusTag.textContent='الاشتراك: '+(merchant.subscription_status==='suspended'?'معلّق':'نشط');
+          feedback.textContent='حُفظ الاشتراك بنجاح.';feedback.className='subscription-feedback success';
+        }catch(e){feedback.textContent='تعذّر الحفظ: '+errorText(e);feedback.className='subscription-feedback error';}
+        finally{save.disabled=false;}
+      });
+      editor.append(field('الباقة',plan),field('الحالة',status),field('تاريخ الانتهاء (توقيت جهازك)',end),save,feedback);
+      item.append(identity,info,date,editor);target.append(item);
     }
     $('merchantPager').hidden=pages<=1;
     $('merchantPageLabel').textContent='صفحة '+numberText(merchantPage+1)+' من '+numberText(pages);
