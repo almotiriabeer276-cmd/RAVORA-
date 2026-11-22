@@ -17,19 +17,22 @@
     .chip{display:inline-block;padding:3px 12px;border:1px solid #826c99;background:#362749;border-radius:99px;color:#e6d2ff;font-size:12px;font-weight:700;margin-bottom:9px}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-block:25px}.stat{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:19px;min-height:145px}.stat span{color:#d9c5e7;font-size:14px}.stat strong{display:block;color:var(--gold);font-size:clamp(30px,5vw,42px);margin-top:8px;font-variant-numeric:tabular-nums;line-height:1.4}.stat small{display:block;margin-top:2px}
     .card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px;margin-block:20px}.notice{padding:16px;border:1px solid #806494;background:#2c1d3b;border-radius:12px;white-space:pre-line;overflow-wrap:anywhere}.notice.error{color:var(--red);background:#462636;border-color:#965d71}.notice.success{color:var(--green);background:#173a31;border-color:#44856d}.list{margin:0;padding-inline-start:23px;color:var(--muted)}.list li{margin-block:8px}
-    .placeholder{color:#b8a7c4;font-size:13px;border:1px dashed #74578c;padding:12px;border-radius:10px}.muted{color:var(--muted)}footer{border-top:1px solid #ffffff1a;text-align:center;padding:20px;color:var(--muted);font-size:12px}
+    .placeholder{color:#b8a7c4;font-size:13px;border:1px dashed #74578c;padding:12px;border-radius:10px}.muted{color:var(--muted)}
+    .section-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:13px}.section-head h2{margin:0}.search{width:min(100%,370px);padding:11px 14px;border:1px solid #846a9c;border-radius:12px;color:var(--text);background:#181024;font:inherit;direction:rtl}.search:focus{outline:2px solid var(--purple);outline-offset:2px}.merchant-list{display:grid;gap:11px}.merchant{border:1px solid #634b7a;background:var(--panel2);border-radius:14px;padding:15px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px}.merchant-name{font-size:17px;font-weight:bold;color:var(--gold);overflow-wrap:anywhere}.merchant-email{font-size:13px;color:#d2c5dc;overflow-wrap:anywhere;direction:ltr;text-align:right}.merchant-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.metric{background:#49335c;padding:4px 10px;border-radius:8px;font-size:13px}.merchant-date{color:var(--muted);font-size:12px}.row-status{color:var(--muted);margin:9px 0}.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:17px}
+    footer{border-top:1px solid #ffffff1a;text-align:center;padding:20px;color:var(--muted);font-size:12px}
     @media(max-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding-inline:14px}.bar{align-items:flex-start}.stat{padding:14px;min-height:120px}.card{padding:17px}}
+    @media(max-width:480px){.merchant{grid-template-columns:1fr}.merchant-info{justify-content:flex-start}.section-head{align-items:stretch}.search{width:100%}}
     @media(max-width:350px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <header><div class="wrap bar">
   <a class="brand" href="./">✦ RAVORA <small>ADMIN</small></a>
-  <div class="actions"><a class="btn" href="./">لوحة متجري</a><button id="refresh" type="button" class="btn" hidden>تحديث الإحصائيات</button><button id="logout" type="button" class="btn" hidden>تسجيل الخروج</button></div>
+  <div class="actions"><a class="btn" href="./">لوحة متجري</a><button id="refresh" type="button" class="btn" hidden>تحديث البيانات</button><button id="logout" type="button" class="btn" hidden>تسجيل الخروج</button></div>
 </div></header>
 <main class="wrap">
   <div class="top">
-    <div><span class="chip">لإدارة المنصة فقط</span><h1>لوحة إدارة رافورا</h1><p>ملخص مباشر لجميع التجار والمسابقات والمشاركات والفائزين.</p></div>
+    <div><span class="chip">لإدارة المنصة فقط</span><h1>لوحة إدارة رافورا</h1><p>إحصائيات المنصة وقائمة التجار المسجلين، خاصة بحساب الإدارة.</p></div>
     <div><small id="account"></small><div><small id="updated"></small></div></div>
   </div>
   <div id="message" class="notice" role="status" aria-live="polite">جارٍ التأكد من حساب الإدارة وتحميل الإحصائيات...</div>
@@ -41,14 +44,23 @@
       <div class="stat"><span>المشاركون</span><strong id="participants">—</strong><small>جميع المشاركات المسجلة</small></div>
       <div class="stat"><span>الفائزون</span><strong id="winners">—</strong><small>نتائج السحب المحفوظة</small></div>
     </section>
-    <section class="card">
-      <h2>إدارة المنصة</h2>
-      <p>المرحلة الحالية تعرض الإحصائيات الحقيقية فقط، ولا تعدّل بيانات التجار أو المسابقات.</p>
-      <div class="placeholder" style="margin-top:14px">المرحلة التالية: قائمة التجار والبحث عنهم، إدارة الاشتراكات، ومراجعة المسابقات — بعد إضافة صلاحيات الخادم المناسبة.</div>
+    <section class="card" aria-labelledby="merchants-title">
+      <div class="section-head">
+        <div><h2 id="merchants-title">قائمة التجار</h2><p>أحدث 100 حساب تاجر، مع عدد المسابقات والمشاركين لكل متجر.</p></div>
+        <input id="merchantSearch" class="search" type="search" placeholder="ابحثي باسم المتجر أو البريد الإلكتروني" aria-label="البحث في التجار المعروضين" autocomplete="off">
+      </div>
+      <p id="merchantStatus" class="row-status" role="status" aria-live="polite">جاري تحميل قائمة التجار...</p>
+      <div id="merchantList" class="merchant-list" aria-live="off"></div>
+      <div id="merchantPager" class="pager" hidden>
+        <button class="btn" id="prevMerchants" type="button">السابق</button>
+        <small id="merchantPageLabel"></small>
+        <button class="btn" id="nextMerchants" type="button">التالي</button>
+      </div>
+      <div class="placeholder" style="margin-top:14px">البحث هنا ضمن أحدث 100 تاجر يعيدهم النظام. إدارة تفعيل التجار والاشتراكات ستُضاف لاحقًا بعد ضبط صلاحياتها؛ لا توجد أزرار حذف أو إيقاف في هذه النسخة.</div>
     </section>
     <section class="card">
       <h2>خصوصية وحماية البيانات</h2>
-      <p>هذه الصفحة لا تطلب أرقام جوالات المشاركين ولا تعرضها. لا تكفي معرفة رابط الصفحة للدخول: يتم التحقق من حساب الإدارة في Supabase، وتتحقق دالة الإحصائيات من الصلاحية مجددًا على الخادم.</p>
+      <p>هذه الصفحة لا تعرض أرقام جوالات المشاركين. لا تكفي معرفة رابط الصفحة للدخول: يتحقق Supabase من حساب الإدارة لكل دالة تعرض الإحصائيات أو بيانات التجار.</p>
     </section>
   </div>
 </main>
@@ -62,30 +74,76 @@ window.addEventListener('DOMContentLoaded',async()=>{
   const errorText=e=>String(e?.message||'تعذّر تنفيذ الطلب.');
   const show=(text,type='')=>{const node=$('message');node.textContent=text;node.className='notice '+type;node.hidden=false;};
   let client=null,authorized=false,loading=false;
+  let merchants=[],searchTerm='',merchantPage=0;
+  const pageSize=12;
   if(!window.supabase){show('تعذر تحميل مكتبة الاتصال. حدّثي الصفحة بعد التأكد من الإنترنت.','error');return;}
   client=window.supabase.createClient(URL,PUBLIC_KEY);
+  function resetProtected(){
+    authorized=false;merchants=[];merchantPage=0;
+    $('protected').hidden=true;$('logout').hidden=true;$('refresh').hidden=true;
+    $('account').textContent='';$('updated').textContent='';
+  }
   async function checkAccess(){
     const {data:userData,error:userError}=await client.auth.getUser();
     if(userError||!userData?.user){
-      $('protected').hidden=true;
+      resetProtected();
       show('سجّلي الدخول أولًا من موقع رافورا بحساب الإدارة، ثم افتحي هذه الصفحة مجددًا.','error');
       return false;
     }
     $('account').textContent=userData.user.email||'';
     const {data:isAdmin,error:roleError}=await client.rpc('is_ravora_admin');
-    if(roleError){$('protected').hidden=true;show('تعذر فحص صلاحية الإدارة: '+errorText(roleError),'error');return false;}
-    if(isAdmin!==true){$('protected').hidden=true;show('ليس لهذا الحساب صلاحية عرض لوحة إدارة رافورا.','error');return false;}
+    if(roleError){resetProtected();show('تعذر فحص صلاحية الإدارة: '+errorText(roleError),'error');return false;}
+    if(isAdmin!==true){resetProtected();show('ليس لهذا الحساب صلاحية عرض لوحة إدارة رافورا.','error');return false;}
     $('logout').hidden=false;$('refresh').hidden=false;
     return true;
   }
+  const numberText=n=>Number(n||0).toLocaleString('ar-SA');
+  function renderMerchants(){
+    const target=$('merchantList');
+    target.replaceChildren();
+    const matching=merchants.filter(m=>
+      String(m.store_name||'').toLocaleLowerCase().includes(searchTerm) ||
+      String(m.email||'').toLocaleLowerCase().includes(searchTerm)
+    );
+    const pages=Math.max(1,Math.ceil(matching.length/pageSize));
+    merchantPage=Math.min(merchantPage,pages-1);
+    const visible=matching.slice(merchantPage*pageSize,(merchantPage+1)*pageSize);
+    $('merchantStatus').textContent=matching.length
+      ? `عرض ${numberText(matching.length)} تاجر من أصل ${numberText(merchants.length)} محمّل`:
+        (searchTerm?'لا توجد نتائج مطابقة للبحث.':'لا توجد حسابات تجار لعرضها.');
+    for(const merchant of visible){
+      const item=document.createElement('article');item.className='merchant';
+      const identity=document.createElement('div');
+      const name=document.createElement('div');name.className='merchant-name';name.textContent=merchant.store_name||'متجر بدون اسم';
+      const email=document.createElement('div');email.className='merchant-email';email.textContent=merchant.email||'البريد غير متوفر';
+      identity.append(name,email);
+      const info=document.createElement('div');info.className='merchant-info';
+      const contestCount=document.createElement('span');contestCount.className='metric';contestCount.textContent='المسابقات: '+numberText(merchant.contests);
+      const participantCount=document.createElement('span');participantCount.className='metric';participantCount.textContent='المشاركات: '+numberText(merchant.participants);
+      info.append(contestCount,participantCount);
+      const date=document.createElement('div');date.className='merchant-date';
+      const d=merchant.created_at?new Date(merchant.created_at):null;
+      date.textContent=d && !Number.isNaN(d.getTime())?'تاريخ التسجيل: '+d.toLocaleDateString('ar-SA'):'';
+      item.append(identity,info,date);target.append(item);
+    }
+    $('merchantPager').hidden=pages<=1;
+    $('merchantPageLabel').textContent='صفحة '+numberText(merchantPage+1)+' من '+numberText(pages);
+    $('prevMerchants').disabled=merchantPage===0;
+    $('nextMerchants').disabled=merchantPage>=pages-1;
+  }
   async function refresh(){
     if(loading)return;
-    loading=true;$('refresh').disabled=true;show('جاري تحديث إحصائيات رافورا...');
+    loading=true;$('refresh').disabled=true;show('جارٍ تحديث إحصائيات رافورا وقائمة التجار...');
     try{
-      if(!authorized)authorized=await checkAccess();
+      // فحص الهوية في كل تحديث، وليس بناءً على حالة قديمة.
+      authorized=await checkAccess();
       if(!authorized)return;
-      const {data,error}=await client.rpc('admin_dashboard_summary');
-      if(error)throw error;
+      const [summaryResult,merchantResult]=await Promise.all([
+        client.rpc('admin_dashboard_summary'),
+        client.rpc('admin_list_merchants')
+      ]);
+      if(summaryResult.error)throw summaryResult.error;
+      const data=summaryResult.data;
       if(!data||typeof data!=='object')throw new Error('لم ترجع قاعدة البيانات بيانات الإحصائيات.');
       for(const name of ['merchants','contests','active_contests','participants','winners']){
         const val=Number(data[name]);
@@ -94,17 +152,32 @@ window.addEventListener('DOMContentLoaded',async()=>{
       }
       $('protected').hidden=false;
       $('updated').textContent='آخر تحديث: '+new Date().toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'});
-      $('message').hidden=true;
-    }catch(e){show('تعذّر عرض الإحصائيات: '+errorText(e),'error');}
+      if(merchantResult.error){
+        merchants=[];renderMerchants();
+        $('merchantStatus').textContent='تعذر تحميل التجار: '+errorText(merchantResult.error);
+        show('ظهرت الإحصائيات، لكن تعذر جلب قائمة التجار. تحققي من نجاح إنشاء الدالة admin_list_merchants.','error');
+      }else if(!Array.isArray(merchantResult.data)){
+        merchants=[];renderMerchants();
+        show('ظهرت الإحصائيات، لكن صيغة قائمة التجار غير متوقعة.','error');
+      }else{
+        merchants=merchantResult.data;
+        merchantPage=0;renderMerchants();
+        $('message').hidden=true;
+      }
+    }catch(e){show('تعذّر عرض البيانات: '+errorText(e),'error');}
     finally{loading=false;$('refresh').disabled=false;}
   }
+  $('merchantSearch').addEventListener('input',e=>{
+    searchTerm=e.target.value.trim().toLocaleLowerCase();merchantPage=0;renderMerchants();
+  });
+  $('prevMerchants').addEventListener('click',()=>{if(merchantPage>0){merchantPage--;renderMerchants();}});
+  $('nextMerchants').addEventListener('click',()=>{merchantPage++;renderMerchants();});
   $('refresh').addEventListener('click',refresh);
   $('logout').addEventListener('click',async()=>{
     $('logout').disabled=true;
     try{
       const {error}=await client.auth.signOut();if(error)throw error;
-      authorized=false;$('protected').hidden=true;$('refresh').hidden=true;$('logout').hidden=true;$('account').textContent='';
-      show('تم تسجيل الخروج. يمكنك تسجيل الدخول من الصفحة الرئيسية.','success');
+      resetProtected();show('تم تسجيل الخروج. يمكنك تسجيل الدخول من الصفحة الرئيسية.','success');
     }catch(e){show('تعذّر تسجيل الخروج: '+errorText(e),'error');}
     finally{$('logout').disabled=false;}
   });
