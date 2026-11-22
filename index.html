@@ -30,6 +30,13 @@ label{display:block;font-size:14px;font-weight:700;margin:13px 0 5px}.field{widt
 .plan-card ul{padding:0 20px 0 0;margin:0;color:var(--muted);font-size:14px}
 .plan-card .btn{margin-top:auto}
 .plan-card.selected{border-color:var(--gold)}
+/* Contest participant quotas (read-only merchant display) */
+.quota-panel{background:#1d132b;border:1px solid #604678;border-radius:12px;padding:11px 13px;display:grid;gap:7px}
+.quota-line{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:space-between;align-items:center;font-size:13px;color:#ebd9fa}
+.quota-line strong{color:var(--gold);font-variant-numeric:tabular-nums}
+.quota-track{height:8px;background:#4b355e;border-radius:99px;overflow:hidden}
+.quota-fill{height:100%;background:linear-gradient(90deg,#8d60c7,#e7c27d);border-radius:99px;transition:width .3s ease}
+.quota-panel.full{border-color:#ad784d}.quota-panel.full .quota-fill{background:#e9bb6a}
 @media(max-width:750px){.plan-grid{grid-template-columns:1fr}}
 @media(max-width:750px){.wrap{padding-inline:15px}.hero{grid-template-columns:1fr;padding-block:35px;gap:26px}.gift{min-height:225px}.gift svg{width:230px}.features{grid-template-columns:1fr;margin-bottom:35px}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:21px;margin:28px 0}.card{padding:17px}.brand{font-size:20px;letter-spacing:2px}.brand small{display:none}.btn{padding:9px 12px;font-size:13px}.welcome{align-items:flex-start}.dashboard-nav .tab{padding:8px 11px;font-size:13px}.preview-box{padding:20px;margin-block:17px}}
 @media(max-width:420px){.grid3{grid-template-columns:1fr 1fr}.grid3 .stat{padding:11px}.stat .value{font-size:22px}.brand{font-size:18px}.actions{gap:6px}}
@@ -74,6 +81,7 @@ label{display:block;font-size:14px;font-weight:700;margin:13px 0 5px}.field{widt
 <label for="contestLink">رابط تسجيل المشاركين</label><input id="contestLink" class="field copyfield" type="text" readonly><div class="inline-flex"><button type="button" id="copyLink" class="btn sm">نسخ رابط المشاركين</button><a id="visitLink" class="btn secondary sm" href="#" target="_blank" rel="noopener">فتح صفحة المشاركين</a></div>
 <div id="detailsMsg" class="notice" role="status" aria-live="polite" hidden></div><div class="inline-flex" id="detailsActions"><button type="button" id="publishContest" class="btn">نشر المسابقة</button><button type="button" id="closeContest" class="btn secondary">إغلاق التسجيل</button><button type="button" id="drawContest" class="btn">🎉 إجراء السحب</button><button type="button" id="exportContest" class="btn secondary">تصدير المشاركين CSV</button></div>
 <div class="grid2"><div class="stat"><div class="value" id="detailsCount">—</div><span>عدد المشاركين</span></div><div class="stat"><div class="value" id="detailsEligible">—</div><span>المشاركون المؤهلون</span></div></div>
+<div id="detailsQuota" class="quota-panel" role="status" aria-live="polite"><span class="hint">جاري تحميل حد المشاركين…</span></div>
 <h3>الفائزون</h3><div id="winnerList" class="list"><div class="empty">لم يتم السحب بعد</div></div><h3>المشاركون</h3><div id="participantsList" class="table-wrap"></div><div class="space-between"><span id="participantsPageStatus" class="hint"></span><button type="button" id="moreParticipants" class="btn secondary sm">عرض المزيد</button></div>
 </div></div>
 <div id="dashSubscription" hidden>
@@ -81,9 +89,9 @@ label{display:block;font-size:14px;font-weight:700;margin:13px 0 5px}.field{widt
 <div class="plan-summary" id="subscriptionSummary" aria-live="polite"><p>جاري تحميل بيانات الاشتراك…</p></div>
 <div class="section-head"><h2>الباقات المتاحة</h2></div>
 <div class="plan-grid">
-<article class="plan-card" data-plan-card="free"><h3>المجانية</h3><p>تجربة المنصة قبل الاشتراك.</p><ul><li>مسابقة واحدة للحساب</li><li>فائز واحد للمسابقة</li><li>حفظ مشاركات العملاء</li></ul><span class="hint">لا تتطلب دفعًا</span></article>
-<article class="plan-card" data-plan-card="premium_monthly"><h3>الاشتراك الشهري</h3><p>للتجار الذين ينظمون مسابقات باستمرار.</p><ul><li>إنشاء مسابقات متعددة خلال مدة الاشتراك</li><li>التحكم بعدد الفائزين</li><li>إدارة المشاركين والتقارير</li></ul><a class="btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/966554765405?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D8%A7%D9%84%D8%B4%D9%87%D8%B1%D9%8A%20%D8%A8%D9%85%D9%86%D8%B5%D8%A9%20RAVORA">طلب الاشتراك عبر واتساب</a></article>
-<article class="plan-card" data-plan-card="premium_annual"><h3>الاشتراك السنوي</h3><p>للتجار الذين ينظمون مسابقات طوال السنة.</p><ul><li>إنشاء مسابقات متعددة خلال مدة الاشتراك</li><li>التحكم بعدد الفائزين</li><li>إدارة المشاركين والتقارير</li></ul><a class="btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/966554765405?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A%20%D8%A8%D9%85%D9%86%D8%B5%D8%A9%20RAVORA">طلب الاشتراك عبر واتساب</a></article>
+<article class="plan-card" data-plan-card="free"><h3>المجانية</h3><p>تجربة المنصة قبل الاشتراك.</p><ul><li>مسابقة واحدة للحساب</li><li>فائز واحد للمسابقة</li><li>50 مشاركًا لكل مسابقة</li><li>حفظ مشاركات العملاء</li></ul><span class="hint">لا تتطلب دفعًا</span></article>
+<article class="plan-card" data-plan-card="premium_monthly"><h3>الاشتراك الشهري</h3><p>للتجار الذين ينظمون مسابقات باستمرار.</p><ul><li>إنشاء مسابقات متعددة خلال مدة الاشتراك</li><li>التحكم بعدد الفائزين</li><li>10,000 مشارك لكل مسابقة</li><li>إدارة المشاركين والتقارير</li></ul><a class="btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/966554765405?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D8%A7%D9%84%D8%B4%D9%87%D8%B1%D9%8A%20%D8%A8%D9%85%D9%86%D8%B5%D8%A9%20RAVORA">طلب الاشتراك عبر واتساب</a></article>
+<article class="plan-card" data-plan-card="premium_annual"><h3>الاشتراك السنوي</h3><p>للتجار الذين ينظمون مسابقات طوال السنة.</p><ul><li>إنشاء مسابقات متعددة خلال مدة الاشتراك</li><li>التحكم بعدد الفائزين</li><li>10,000 مشارك لكل مسابقة</li><li>إدارة المشاركين والتقارير</li></ul><a class="btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/966554765405?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D8%A7%D9%84%D8%B3%D9%86%D9%88%D9%8A%20%D8%A8%D9%85%D9%86%D8%B5%D8%A9%20RAVORA">طلب الاشتراك عبر واتساب</a></article>
 </div>
 <p class="hint" style="margin-top:18px">طلبات الاشتراك والتجديد تتم حاليًا عبر واتساب، ويُفعّل الاشتراك بعد مراجعة الإدارة. لا يوجد خصم إلكتروني تلقائي في هذه النسخة. الأسعار تُحدد عند التواصل مع الإدارة.</p>
 </div>
@@ -240,6 +248,44 @@ window.addEventListener('DOMContentLoaded',()=>{
     $('settingsStore').value=data.store_name;
   }
   const PLAN_LABELS={free:'المجانية',premium_monthly:'الشهرية',premium_annual:'السنوية'};
+  function participantLimit(){
+    if(subscription?.plan==='free')return 50;
+    if(['premium_monthly','premium_annual'].includes(subscription?.plan))return 10000;
+    return null;
+  }
+  function displayQuota(target,count,error=null){
+    if(!target)return;
+    target.replaceChildren();target.classList.remove('full');
+    if(error||!Number.isFinite(count)||count<0){
+      target.append(make('span','hint','تعذر تحميل عدد المشاركين. اضغطي تحديث القائمة للمحاولة من جديد.'));return;
+    }
+    const limit=participantLimit();
+    if(!limit){target.append(make('span','hint','عدد المشاركين: '+count.toLocaleString('ar-SA')+' • حد الباقة غير متوفر حاليًا.'));return;}
+    const full=count>=limit, remaining=Math.max(0,limit-count);
+    const line=make('div','quota-line');
+    line.append(make('strong','',count.toLocaleString('ar-SA')+' / '+limit.toLocaleString('ar-SA')+' مشارك'),
+      make('span','',full?'اكتمل العدد المسموح': 'المتبقي '+remaining.toLocaleString('ar-SA')));
+    const track=make('div','quota-track');track.setAttribute('role','progressbar');
+    track.setAttribute('aria-label','المشاركون المسجلون من الحد المسموح');
+    track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax',String(limit));
+    track.setAttribute('aria-valuenow',String(Math.min(count,limit)));
+    const fill=make('div','quota-fill');fill.style.width=Math.min(100,count/limit*100)+'%';track.append(fill);
+    target.classList.toggle('full',full);target.append(line,track);
+  }
+  async function hydrateContestQuotas(entries){
+    let next=0;
+    const worker=async()=>{
+      while(next<entries.length){
+        const [id,el]=entries[next++];
+        try{
+          const {count,error}=await db.from('participants')
+            .select('id',{count:'exact',head:true}).eq('contest_id',id);
+          if(el.isConnected)displayQuota(el,count,error);
+        }catch(e){if(el.isConnected)displayQuota(el,null,e);}
+      }
+    };
+    await Promise.all(Array.from({length:Math.min(4,entries.length)},()=>worker()));
+  }
   function subscriptionState(){
     if(!subscription)return {kind:'missing',label:'غير متوفر',allowed:false};
     if(subscription.status==='suspended')return {kind:'suspended',label:'معلّق',allowed:false};
@@ -271,10 +317,11 @@ window.addEventListener('DOMContentLoaded',()=>{
       make('span','plan-pill '+(state.kind==='active'?'good':'bad'),'الحالة: '+state.label));
     box.append(make('h3','','باقة متجرك الحالية'),row);
     if(subscription.plan==='free'){
-      box.append(make('p','','عدد المسابقات المستخدمة: '+contests.length+' من 1. الحد المجاني يشمل فائزًا واحدًا.'));
+      box.append(make('p','','عدد المسابقات المستخدمة: '+contests.length+' من 1. الحد المجاني يشمل فائزًا واحدًا و50 مشاركًا في المسابقة.'));
     }else{
       box.append(make('p','','بداية الاشتراك: '+safeDate(subscription.started_at)));
       box.append(make('p','','تاريخ الانتهاء: '+(subscription.ends_at?safeDate(subscription.ends_at):'غير محدد — تواصلي مع الإدارة')));
+      box.append(make('p','','حد التسجيل: 10,000 مشارك لكل مسابقة.'));
     }
     if(!state.allowed){
       const p=make('p','',state.kind==='limit'?'اكتمل عدد المسابقات المسموح به. يمكنك إدارة المسابقة الموجودة وطلب الترقية.':'إنشاء أو نشر مسابقات جديدة قد لا يكون متاحًا. يمكنك مراجعة مسابقاتك السابقة وطلب المساعدة.');
@@ -292,7 +339,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     renderSubscription();
   }
   $('refreshSubscription').addEventListener('click',async()=>{
-    try{await loadSubscription();notice('dashMsg','تم تحديث بيانات الاشتراك.','ok');}
+    try{await loadSubscription();if(!$('dashList').hidden)renderContestList();notice('dashMsg','تم تحديث بيانات الاشتراك.','ok');}
     catch(e){notice('dashMsg',failMessage(e),'error');}
   });
   async function openDashboard(view='list'){
@@ -301,8 +348,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     try{
       if(!profile)await loadProfile();
       notice('dashMsg');
-      if(view==='list'||view==='subscription')await loadContests();
       await loadSubscription();
+      if(view==='list'||view==='subscription')await loadContests();
       showView(view);
     }catch(e){notice('dashMsg',failMessage(e),'error');showView('list');}
   }
@@ -342,6 +389,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   function renderContestList(){
     const list=$('contestList');list.replaceChildren();
     if(!contests.length){empty(list,'ما عندك مسابقات حتى الآن. اضغطي «إنشاء مسابقة» للبدء.');return;}
+    const quotaEntries=[];
     for(const c of contests){
       const card=make('article','contest-card');
       const head=make('div','space-between');
@@ -356,8 +404,11 @@ window.addEventListener('DOMContentLoaded',()=>{
       if(c.status!=='draft'){
         const link=make('button','btn secondary sm','نسخ رابط المشاركة');link.type='button';link.addEventListener('click',async()=>{await copyText(contestUrl(c.id));link.textContent='تم طلب نسخ الرابط';setTimeout(()=>link.textContent='نسخ رابط المشاركة',1800);});actions.append(link);
       }
-      card.append(head,dates,actions);list.append(card);
+      const quota=make('div','quota-panel');quota.append(make('span','hint','جاري تحميل عدد المشاركين…'));
+      card.append(head,dates,quota,actions);list.append(card);
+      quotaEntries.push([c.id,quota]);
     }
+    void hydrateContestQuotas(quotaEntries);
   }
 
   function questionId(){return 'q_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);}
@@ -455,6 +506,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     $('visitLink').style.opacity=c.status==='draft'?'0.5':'1';
     notice('detailsMsg',c.status==='draft'?'هذه مسودة. انشري المسابقة أولًا حتى يصبح رابط التسجيل متاحًا للعملاء.':'',c.status==='draft'?'warn':'');
     $('detailsCount').textContent='—';$('detailsEligible').textContent='—';
+    $('detailsQuota').replaceChildren(make('span','hint','جاري تحميل عدد المشاركين…'));
     pageOffset=0;participantsLoaded=0;participantsTotal=0;
     await Promise.all([loadParticipantCounts(c),loadWinners(c),loadParticipants(c,true)]);
   }
@@ -493,6 +545,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(all.error)notice('detailsMsg',failMessage(all.error),'error');
     $('detailsCount').textContent=all.error?'—':(all.count||0).toLocaleString('ar-SA');
     $('detailsEligible').textContent=eligible.error?'—':(eligible.count||0).toLocaleString('ar-SA');
+    displayQuota($('detailsQuota'),all.count,all.error);
   }
   async function loadWinners(c){
     const list=$('winnerList');
