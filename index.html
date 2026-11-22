@@ -61,7 +61,8 @@ label{display:block;font-size:14px;font-weight:700;margin:13px 0 5px}.field{widt
 <label for="publicPhone">رقم الجوال *</label><input class="field" id="publicPhone" name="tel" type="tel" inputmode="tel" autocomplete="tel" maxlength="23" required dir="ltr" placeholder="05XXXXXXXX أو رقم دولي">
 <div id="publicQuestions"></div><div id="publicTerms" hidden><label>شروط المسابقة</label><div id="publicTermsText" class="terms"></div><label class="checkbox-label"><input type="checkbox" id="acceptTerms"> قرأت شروط المسابقة وأوافق عليها *</label></div>
 <label class="checkbox-label"><input type="checkbox" id="acceptPrivacy" required> أوافق على استخدام بياناتي لغرض إدارة هذه المسابقة والتواصل عند الفوز *</label>
-<button type="submit" class="btn full form-submit" id="joinContest">تسجيل المشاركة</button><p class="hint">مشاركة واحدة لكل رقم جوال في المسابقة. لا تظهر بياناتك للمشاركين الآخرين.</p></form>
+<div class="answers-group" aria-label="التحقق الأمني"><p class="hint">التحقق الأمني قبل إرسال المشاركة</p><div id="joinCaptcha"></div><p id="joinCaptchaStatus" class="hint" role="status" aria-live="polite">جاري تهيئة الحماية…</p></div>
+<button type="submit" class="btn full form-submit" id="joinContest" disabled>تسجيل المشاركة</button><p class="hint">مشاركة واحدة لكل رقم جوال في المسابقة. لا تظهر بياناتك للمشاركين الآخرين.</p></form>
 <p style="text-align:center"><a href="./">العودة إلى رافورا</a></p></section>
 <noscript><p class="notice error">لتشغيل الموقع يرجى تفعيل JavaScript في المتصفح.</p></noscript>
 </main><footer>© 2026 RAVORA | رافورا — جميع الحقوق محفوظة</footer>
@@ -74,7 +75,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   // هذا مفتاح PUBLIC/PUBLISHABLE فقط. لا تضعي service_role أو secret key في HTML.
   const PUBLISHABLE_KEY='sb_publishable_rF1d6F1FRgm0CJpxcwvj2g_G3g5Vo-s';
   const publicContestId=new URLSearchParams(location.search).get('contest');
-  let db,session=null,profile=null,contests=[],currentContest=null,editorId=null,authMode='login',busy=false,recovery=false,questions=[],pageOffset=0,participantsLoaded=0,participantsTotal=0,publicQuestions=[];
+  let db,session=null,profile=null,contests=[],currentContest=null,editorId=null,authMode='login',busy=false,recovery=false,questions=[],pageOffset=0,participantsLoaded=0,participantsTotal=0,publicQuestions=[],joinCaptchaToken='',joinWidgetId=null;
   const pageSize=100;
 
   function notice(id,message='',kind=''){
@@ -466,6 +467,52 @@ window.addEventListener('DOMContentLoaded',()=>{
     catch(err){notice('dashMsg',failMessage(err),'error');}
   });
 
+  // حماية التسجيل: يُجلب المفتاح العام فقط من Edge Function.
+  // لا تتم إضافة أي مشاركة إلى قاعدة البيانات قبل تحقق الخادم من Turnstile.
+  async function setupJoinCaptcha(){
+    const submit=$('joinContest');submit.disabled=true;joinCaptchaToken='';
+    $('joinCaptchaStatus').textContent='جاري تحميل التحقق الأمني…';
+    try{
+      const {data,error}=await db.functions.invoke('join-contest',{method:'GET'});
+      if(error||!data?.siteKey)throw new Error('خدمة الحماية غير جاهزة.');
+      if(!window.turnstile){
+        await new Promise((resolve,reject)=>{
+          const sc=document.createElement('script');
+          sc.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+          sc.async=true;sc.defer=true;
+          sc.onload=resolve;sc.onerror=()=>reject(new Error('تعذر تحميل التحقق الأمني.'));
+          document.head.append(sc);
+        });
+      }
+      joinWidgetId=window.turnstile.render('#joinCaptcha',{
+        sitekey:data.siteKey,
+        action:'join_contest',
+        theme:'dark',
+        callback:(token)=>{
+          joinCaptchaToken=token;
+          submit.disabled=false;
+          $('joinCaptchaStatus').textContent='اكتمل التحقق. يمكنك تسجيل المشاركة.';
+        },
+        'expired-callback':()=>{
+          joinCaptchaToken='';submit.disabled=true;
+          $('joinCaptchaStatus').textContent='انتهت صلاحية التحقق، أعيدي إكماله.';
+        },
+        'error-callback':()=>{
+          joinCaptchaToken='';submit.disabled=true;
+          $('joinCaptchaStatus').textContent='تعذر التحقق الأمني، أعيدي تحميل الصفحة.';
+        }
+      });
+    }catch(error){
+      submit.disabled=true;
+      $('joinCaptchaStatus').textContent='تعذر تفعيل الحماية. يرجى المحاولة لاحقًا.';
+    }
+  }
+  function resetJoinCaptcha(){
+    joinCaptchaToken='';$('joinContest').disabled=true;
+    $('joinCaptchaStatus').textContent='يرجى إكمال التحقق الأمني مجددًا.';
+    if(window.turnstile&&joinWidgetId!==null)window.turnstile.reset(joinWidgetId);
+  }
+
   // الصفحة العامة: رمز UUID للمسابقة فقط، لا تكشف أسماء أو أرقام المسجلين.
   async function initPublicContest(){
     navigate('publicContest');$('navAuth').hidden=true;$('navMember').hidden=true;
@@ -509,25 +556,38 @@ window.addEventListener('DOMContentLoaded',()=>{
       }
       form.append(fieldset);
     }
+    await setupJoinCaptcha();
   }
   $('publicForm').addEventListener('submit',async e=>{
     e.preventDefault();if(busy)return;
+    if(!joinCaptchaToken){notice('publicMsg','أكملي التحقق الأمني قبل التسجيل.','warn');return;}
     const answers={};for(const q of publicQuestions){
       if(q.type==='text')answers[q.id]=q.input.value.trim();
       else answers[q.id]=q.inputs.find(a=>a.checked)?.value||'';
     }
+    const token=joinCaptchaToken;
     const btn=$('joinContest');btn.disabled=true;busy=true;notice('publicMsg','جاري تسجيل المشاركة…');
     try{
-      const {data,error}=await db.rpc('register_participant',{
-        p_contest_id:publicContestId,
-        p_full_name:$('publicName').value.trim(),p_phone:$('publicPhone').value.trim(),p_answers:answers,
-        p_accepted_terms:$('acceptTerms').checked,p_accepted_privacy:$('acceptPrivacy').checked
+      const {data,error}=await db.functions.invoke('join-contest',{
+        body:{
+          contestId:publicContestId,
+          fullName:$('publicName').value.trim(),phone:$('publicPhone').value.trim(),answers,
+          acceptedTerms:$('acceptTerms').checked,acceptedPrivacy:$('acceptPrivacy').checked,
+          turnstileToken:token
+        }
       });
-      if(error)throw error;
+      if(error){
+        let message=error.message;
+        if(error.context?.json){
+          try{message=(await error.context.json())?.message||message;}catch{}
+        }
+        throw new Error(message||'تعذر تسجيل المشاركة.');
+      }
+      if(!data?.success)throw new Error(data?.message||'تعذر تسجيل المشاركة.');
       $('publicForm').hidden=true;
-      notice('publicMsg',data?.message||'تم استلام مشاركتك بنجاح.','ok');
-    }catch(err){notice('publicMsg',failMessage(err),'error');}
-    finally{btn.disabled=false;busy=false;}
+      notice('publicMsg',data.message||'تم استلام مشاركتك بنجاح.','ok');
+    }catch(err){notice('publicMsg',failMessage(err),'error');resetJoinCaptcha();}
+    finally{busy=false;}
   });
 
   // صفحة المسابقة العامة لا تتطلب حساب تاجر.
