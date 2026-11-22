@@ -1,44 +1,541 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RAVORA | رافورا للمسابقات والسحب على الجوائز</title>
-<meta name="description" content="رافورا، منصة لإدارة مسابقات المتاجر وتسجيل المشاركين والسحب العشوائي على الجوائز.">
-<meta name="theme-color" content="#130d20">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#140d20">
+<meta name="description" content="RAVORA | منصة إدارة المسابقات والسحب العشوائي وجمع مشاركات العملاء للتجار.">
+<title>RAVORA | رافورا</title>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-:root{color-scheme:dark;--bg:#130d20;--panel:#21162f;--border:#4a355f;--text:#faf5ff;--muted:#c9b9d7;--gold:#efce8c;--purple:#b68af4}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0,#41275b 0,transparent 38%),var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif;line-height:1.8}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}a{color:var(--gold)}[hidden]{display:none!important}.wrap{max-width:1100px;margin:auto;padding:0 24px}header{border-bottom:1px solid #ffffff15}nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:19px!important}.brand{font:700 25px Georgia,serif;letter-spacing:4px;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:9px}.brand small{font:12px Tahoma;letter-spacing:0;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid transparent;border-radius:12px;padding:11px 20px;font-weight:bold;background:linear-gradient(125deg,#fbe2ad,#cba166);color:#24172a;text-decoration:none;display:inline-block;text-align:center}.btn.secondary{background:#ffffff08;color:var(--text);border-color:var(--border)}.btn.full{width:100%}.hero{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:48px;padding-block:75px 55px}.eyebrow{display:inline-block;font-size:13px;color:var(--gold);border:1px solid #d6ac6e55;border-radius:30px;padding:3px 13px;background:#e2bf7610}h1{font-size:clamp(32px,5vw,58px);line-height:1.35;margin:16px 0;letter-spacing:-1px}h1 span{color:var(--gold)}p{color:var(--muted)}.hero p{font-size:17px;max-width:540px}.illustration{position:relative;border:1px solid #bc8bf04a;border-radius:28px;min-height:330px;display:grid;place-items:center;background:radial-gradient(ellipse,#553176,#21152f 70%);overflow:hidden;box-shadow:0 25px 80px #0005}.illustration svg{width:min(89%,350px);height:auto}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:64px}.tile,.panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px}.tile strong{display:block;font-size:19px}.tile p{font-size:14px;margin:8px 0 0}.symbol{color:var(--gold);font-size:25px}.panel{max-width:510px;margin:48px auto 70px;box-shadow:0 20px 80px #0004;padding:30px}.panel h2{margin:0 0 4px;font-size:27px}.panel p{margin-top:0}.tabs{display:flex;gap:5px;background:#130d20;padding:5px;border-radius:12px;margin:20px 0}.tabs button{flex:1;background:transparent;border:0;color:var(--muted);border-radius:9px;padding:10px}.tabs .active{background:#4a3066;color:white;font-weight:bold}label{display:block;margin:14px 0 5px;font-size:14px}input{width:100%;padding:12px 13px;background:#160f23;color:white;border:1px solid #563e6e;border-radius:10px;outline:none}input:focus{border-color:#d1a6ff;box-shadow:0 0 0 3px #b68af422}input::placeholder{color:#9f8bad}form .btn{margin-top:20px}.linkbtn{background:none;border:0;color:var(--gold);padding:9px 0;text-decoration:underline}.note{font-size:13px;color:var(--muted)}.notice{border:1px solid #5f4975;background:#302040;padding:12px;border-radius:10px;margin-top:15px;overflow-wrap:anywhere}.notice.error{color:#ffd1d1;border-color:#995b69;background:#482332}.notice.ok{color:#c1f6e0;border-color:#3e8068;background:#173b35}.account{text-align:center}.account .symbol{font-size:50px}.account .email{direction:ltr;overflow-wrap:anywhere}footer{border-top:1px solid #ffffff15;text-align:center;color:var(--muted);font-size:13px;padding:24px}.muted{color:var(--muted)}@media(max-width:700px){.wrap{padding-inline:16px}.hero{grid-template-columns:1fr;gap:26px;padding-block:36px}.illustration{min-height:240px}.illustration svg{max-width:270px}.features{grid-template-columns:1fr;gap:10px;margin-bottom:35px}.panel{margin:30px 0 40px;padding:22px}.brand{font-size:20px;letter-spacing:2px}.brand small{display:none}nav .btn{padding:8px 11px;font-size:12px}.hero p{font-size:15px}}
+:root{color-scheme:dark;--bg:#130d20;--panel:#22172f;--panel2:#2c1e3e;--border:#513866;--text:#faf5ff;--muted:#c6b6d2;--gold:#efce8c;--purple:#b88cf5;--green:#b8f3d5;--danger:#ffd0db}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 83% 0,#41265a 0,transparent 42%),var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif;line-height:1.8}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}[hidden]{display:none!important}a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}h1,h2,h3{line-height:1.35;margin:0}p{color:var(--muted)}small,.muted{color:var(--muted)}.wrap{max-width:1120px;margin-inline:auto;padding-inline:22px}
+header{border-bottom:1px solid #ffffff16;position:relative;z-index:3}nav{display:flex;align-items:center;justify-content:space-between;gap:15px;padding-block:20px}.brand{font:700 25px Georgia,serif;letter-spacing:3px;color:var(--gold);white-space:nowrap}.brand small{font:12px Tahoma,Arial,sans-serif;letter-spacing:0}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.btn{display:inline-block;background:linear-gradient(125deg,#fbe2ad,#ca9e63);color:#25182c;border:1px solid transparent;border-radius:12px;font-weight:700;padding:11px 18px;text-align:center;transition:filter .15s;text-decoration:none}.btn:hover{filter:brightness(1.08);text-decoration:none}.btn.secondary{background:#ffffff08;border-color:var(--border);color:var(--text)}.btn.danger{background:#4a253a;color:#ffe0eb;border-color:#93566e}.btn.sm{padding:7px 12px;font-size:13px}.btn.full{width:100%}.btn:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #e7c8ff;outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:45px;padding-block:72px 58px}.eyebrow{display:inline-block;border:1px solid #dcbf8155;border-radius:99px;padding:4px 15px;color:var(--gold);font-size:13px}.hero h1{font-size:clamp(32px,5vw,57px);letter-spacing:-1px;margin:16px 0}.hero h1 span{color:var(--gold)}.hero p{max-width:570px}.gift{border:1px solid #b78bf055;border-radius:26px;min-height:300px;display:grid;place-items:center;background:radial-gradient(ellipse,#593675,#21152f 70%);box-shadow:0 25px 70px #0005}.gift svg{width:85%;max-width:350px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px}.tile,.card,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px}.tile strong{display:block;font-size:19px}.tile p{font-size:14px;margin:7px 0 0}.tile .star{color:var(--gold);font-size:27px}
+.panel{max-width:540px;margin:46px auto 75px;padding:29px;box-shadow:0 18px 60px #0003}.panel h2{margin-bottom:9px}.panel p{margin:0}.tabs{display:flex;gap:6px;background:#140e20;padding:5px;margin:22px 0;border-radius:12px}.tab{flex:1;background:transparent;border:0;color:var(--muted);border-radius:9px;padding:10px}.tab.active{background:#4a3066;color:white;font-weight:700}
+label{display:block;font-size:14px;font-weight:700;margin:13px 0 5px}.field{width:100%;border:1px solid #60487a;color:var(--text);border-radius:10px;background:#170f23;padding:11px 13px;outline:none;min-width:0}.field::placeholder{color:#a08eac}select.field{color-scheme:dark}textarea.field{resize:vertical;min-height:80px}.field:focus{border-color:#d0aaff;box-shadow:0 0 0 3px #b68af421}.checkbox-label{display:flex;align-items:flex-start;gap:8px;font-weight:400}.checkbox-label input{width:auto;accent-color:#a17ad6;margin-top:8px}.form-submit{margin-top:22px}.linkbtn{background:none;border:0;color:var(--gold);text-decoration:underline;padding:9px 0}.note{font-size:13px;color:var(--muted)}.notice{border:1px solid #735b86;background:#362447;border-radius:11px;padding:13px 14px;margin:14px 0;overflow-wrap:anywhere;white-space:pre-line}.notice.ok{background:#193c33;border-color:#44856d;color:var(--green)}.notice.error{background:#462636;border-color:#965d71;color:var(--danger)}.notice.warn{background:#3d3027;border-color:#926e46;color:#ffe0b8}.inline-flex{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.space-between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.stack{display:grid;gap:14px}.section-head{margin:25px 0 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.section-head p{margin:3px 0 0}.stat{border:1px solid #4d3760;background:#241933;padding:16px;border-radius:15px}.stat .value{font-size:27px;color:var(--gold);font-weight:bold;font-variant-numeric:tabular-nums}.stat span{font-size:13px;color:var(--muted)}
+#dashboard{padding-block:28px 75px;min-height:65vh}.welcome{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:9px 0 19px}.welcome h1{font-size:clamp(22px,4vw,35px);color:#e9d6ff}.dashboard-nav{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}.dashboard-nav .tab{flex:initial;padding:10px 16px;background:#2e2040;border:1px solid var(--border)}.dashboard-nav .tab.active{background:#684692;border-color:#9974c8}.contest-card{padding:18px 20px;background:#281b38;border:1px solid #563b6a;border-radius:15px;display:grid;gap:13px}.contest-card h3{font-size:19px}.contest-card p{font-size:14px;margin:3px 0}.status{display:inline-block;border:1px solid #8a719a;color:#eed9fc;background:#473357;border-radius:99px;padding:2px 10px;font-size:12px}.status.open{background:#1a4537;color:#baf1cf;border-color:#3e876a}.status.drawn{background:#665021;color:#ffe8a2;border-color:#a48336}.status.closed{background:#462b3d;color:#ffdce9;border-color:#86506d}.question{background:#1b1229;padding:14px;border:1px solid #60437a;border-radius:12px}.question h3{font-size:16px;margin:0 0 6px}.question .inline-flex{justify-content:space-between}.question .field{margin-bottom:7px}.question .checkbox-label{margin-top:10px}.divider{height:1px;background:#ffffff1b;margin-block:20px}.hint{font-size:12px;color:#b5a5c1}.copyfield{font-family:monospace;font-size:12px;direction:ltr;text-align:left}.list{display:grid;gap:13px}.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:12px}.data-table{border-collapse:collapse;width:100%;font-size:14px;min-width:550px}.data-table th,.data-table td{padding:11px 13px;text-align:right;border-bottom:1px solid #513866;white-space:nowrap;vertical-align:top}.data-table th{background:#382549;color:var(--gold)}.data-table tr:last-child td{border:0}.data-table td.answers-cell{white-space:normal;max-width:380px;min-width:150px}.code{font-family:monospace;direction:ltr;unicode-bidi:plaintext}.empty{text-align:center;padding:32px 15px;color:var(--muted);border:1px dashed #65477d;border-radius:12px}.preview-box{border:1px solid var(--border);border-radius:20px;background:#21162f;max-width:650px;margin:28px auto;padding:28px;box-shadow:0 18px 50px #0004}.preview-box h1{color:var(--gold);font-size:clamp(24px,5vw,36px)}.preview-box .subtitle{font-size:15px;color:var(--muted)}.public-logo{max-width:150px;max-height:95px;object-fit:contain;margin:4px auto;display:block}.public-prize{width:100%;max-width:460px;max-height:240px;object-fit:contain;border-radius:14px;display:block;margin:16px auto}.terms{white-space:pre-line;border:1px solid #69517c;padding:12px;border-radius:10px;background:#160f23;margin:10px 0}.answers-group{border:1px solid #4c3560;border-radius:12px;margin:16px 0;padding:12px}.answers-group legend{padding-inline:8px;color:var(--gold);font-size:14px}.answers-group label{display:flex;align-items:center;gap:8px;font-weight:400;margin:7px 0}.answers-group input[type=radio]{accent-color:#b48af0}footer{border-top:1px solid #ffffff1a;text-align:center;padding:23px;font-size:13px;color:var(--muted)}
+@media(max-width:750px){.wrap{padding-inline:15px}.hero{grid-template-columns:1fr;padding-block:35px;gap:26px}.gift{min-height:225px}.gift svg{width:230px}.features{grid-template-columns:1fr;margin-bottom:35px}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:21px;margin:28px 0}.card{padding:17px}.brand{font-size:20px;letter-spacing:2px}.brand small{display:none}.btn{padding:9px 12px;font-size:13px}.welcome{align-items:flex-start}.dashboard-nav .tab{padding:8px 11px;font-size:13px}.preview-box{padding:20px;margin-block:17px}}
+@media(max-width:420px){.grid3{grid-template-columns:1fr 1fr}.grid3 .stat{padding:11px}.stat .value{font-size:22px}.brand{font-size:18px}.actions{gap:6px}}
 </style>
 </head>
 <body>
-<header><nav class="wrap"><a href="#" class="brand">✦ RAVORA <small>رافورا</small></a><div class="actions" id="navAuth"><button class="btn secondary" data-open="login">دخول التاجر</button><button class="btn" data-open="signup">إنشاء حساب</button></div><button id="navLogout" class="btn secondary" hidden>تسجيل الخروج</button></nav></header>
+<header><nav class="wrap"><a class="brand" href="./" id="brand">✦ RAVORA <small>رافورا</small></a>
+<div class="actions" id="navAuth"><button class="btn secondary" type="button" data-open="login">دخول التاجر</button><button class="btn" type="button" data-open="signup">إنشاء حساب</button></div>
+<div class="actions" id="navMember" hidden><button class="btn secondary" id="navMyDash" type="button">لوحة متجري</button><button class="btn secondary" id="navLogout" type="button">تسجيل الخروج</button></div></nav></header>
 <main class="wrap">
-<div id="landing">
-<section class="hero"><div><span class="eyebrow">منصة المسابقات والسحب على الجوائز</span><h1>حوّل كل مسابقة إلى <span>لحظة لا تُنسى.</span></h1><p>رافورا تساعد التجار على تنظيم المسابقات، جمع مشاركات العملاء، تخصيص الأسئلة والشروط، وإعلان الفائزين بسحب عشوائي موثق.</p><div class="actions"><button class="btn" data-open="signup">أنشئ حساب متجرك</button><button class="btn secondary" data-open="login">لدي حساب</button></div></div>
-<div class="illustration" aria-label="رسم توضيحي لهدية المسابقة"><svg viewBox="0 0 360 280" role="img" aria-label="صندوق هدية بنفسجي وذهبي"><defs><linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a279e0"/><stop offset="1" stop-color="#553279"/></linearGradient><linearGradient id="ribbon"><stop stop-color="#fce1a8"/><stop offset="1" stop-color="#b88948"/></linearGradient></defs><ellipse cx="180" cy="243" rx="127" ry="21" fill="#140e21" opacity=".5"/><g fill="#efce8c"><path d="M41 44l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M315 85l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/><path d="M291 27l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><circle cx="70" cy="115" r="3"/><circle cx="320" cy="185" r="4"/><circle cx="44" cy="205" r="3"/></g><path d="M180 91C80 79 94 13 137 40c23 15 43 51 43 51s20-36 43-51c43-27 57 39-43 51" fill="none" stroke="url(#ribbon)" stroke-width="13" stroke-linecap="round"/><rect x="89" y="119" width="182" height="115" rx="10" fill="url(#box)"/><rect x="75" y="89" width="210" height="38" rx="8" fill="#b48beb"/><rect x="163" y="89" width="34" height="145" fill="url(#ribbon)"/><path d="M90 128h180" stroke="#321d46" opacity=".4" stroke-width="4"/><path d="M180 152l7 15 17 2-12 12 3 17-15-8-15 8 3-17-12-12 17-2z" fill="#fff1c9" opacity=".9"/></svg></div></section>
-<section class="features"><article class="tile"><div class="symbol">✧</div><strong>مسابقتك بطريقتك</strong><p>خصص أسئلة المشاركة، الجائزة، الشروط ومواعيد التسجيل.</p></article><article class="tile"><div class="symbol">⌘</div><strong>رابط مشاركة مستقل</strong><p>شارك رابط مسابقتك مع العملاء واجمع التسجيلات في مكان واحد.</p></article><article class="tile"><div class="symbol">♕</div><strong>سحب عشوائي</strong><p>اختر الفائزين من المشاركات المؤهلة واحفظ نتيجة السحب.</p></article></section></div>
-<section id="authPanel" class="panel" hidden><h2 id="authTitle">حساب التاجر</h2><p id="authSubtitle">مرحبًا بك في رافورا</p><div class="tabs" id="tabs"><button id="tabLogin" data-open="login">تسجيل الدخول</button><button id="tabSignup" data-open="signup">حساب جديد</button></div>
-<form id="authForm"><div id="storeField" hidden><label for="store">اسم المتجر</label><input id="store" type="text" maxlength="150" autocomplete="organization" placeholder="اسم متجرك"></div><div id="emailField"><label for="email">البريد الإلكتروني</label><input id="email" type="email" dir="ltr" autocomplete="email" placeholder="name@example.com" required></div><div id="passwordField"><label for="password" id="passwordLabel">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="8 أحرف على الأقل"><label class="note" style="display:flex;align-items:center;gap:8px"><input id="showPass" type="checkbox" style="width:auto"> إظهار كلمة المرور</label></div><button id="submitBtn" class="btn full" type="submit">دخول</button></form>
-<button id="forgot" class="linkbtn" data-open="forgot">نسيت كلمة المرور؟</button><button id="backLogin" class="linkbtn" data-open="login" hidden>العودة لتسجيل الدخول</button><div id="message" class="notice" role="status" aria-live="polite" hidden></div></section>
-<section id="accountPanel" class="panel account" hidden><div class="symbol">✦</div><h2 id="welcome">مرحبًا بك في رافورا</h2><p id="accountEmail" class="email"></p><div id="profileNote" class="notice" role="status">تم تسجيل الدخول. هذه النسخة مخصصة لاختبار الحسابات؛ لوحة المسابقات ستُضاف في المرحلة التالية.</div><button id="logout" class="btn secondary full" style="margin-top:18px">تسجيل الخروج</button></section>
-<noscript><p>يرجى تفعيل JavaScript لاستخدام الموقع.</p></noscript></main>
-<footer>© 2026 RAVORA | رافورا — جميع الحقوق محفوظة</footer>
+<div id="landing"><section class="hero"><div><span class="eyebrow">منصة مسابقات المتاجر والسحب على الجوائز</span><h1>مسابقتك في <span>رابط واحد.</span></h1><p>ينشئ التاجر مسابقة، ويضيف الأسئلة والشروط، وينشر الرابط للعملاء. تُحفظ المشاركات في لوحة تحكمه، ويجري السحب بنفسه.</p><div class="actions"><button class="btn" type="button" data-open="signup">أنشئ حساب متجرك</button><button class="btn secondary" type="button" data-open="login">لدي حساب</button></div></div>
+<div class="gift"><svg viewBox="0 0 360 280" role="img" aria-label="صندوق هدية بنفسجي وذهبي"><defs><linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a279e0"/><stop offset="1" stop-color="#553279"/></linearGradient><linearGradient id="ribbon"><stop stop-color="#fce1a8"/><stop offset="1" stop-color="#b88948"/></linearGradient></defs><ellipse cx="180" cy="243" rx="127" ry="21" fill="#140e21" opacity=".5"/><g fill="#efce8c"><path d="M41 44l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M315 85l3 9 9 3-9 3-3 9-9-3 9-3z"/></g><path d="M180 91C80 79 94 13 137 40c23 15 43 51 43 51s20-36 43-51c43-27 57 39-43 51" fill="none" stroke="url(#ribbon)" stroke-width="13" stroke-linecap="round"/><rect x="89" y="119" width="182" height="115" rx="10" fill="url(#box)"/><rect x="75" y="89" width="210" height="38" rx="8" fill="#b48beb"/><rect x="163" y="89" width="34" height="145" fill="url(#ribbon)"/><path d="M180 152l7 15 17 2-12 12 3 17-15-8-15 8 3-17-12-12 17-2z" fill="#fff1c9"/></svg></div></section>
+<section class="features"><div class="tile"><span class="star">✧</span><strong>تخصيص المسابقة</strong><p>الجائزة، مواعيد التسجيل، الأسئلة والشروط في دقائق.</p></div><div class="tile"><span class="star">⌘</span><strong>رابط تسجيل تلقائي</strong><p>العميل يسجّل اسمه ورقم جواله بنفسه.</p></div><div class="tile"><span class="star">♕</span><strong>سحب وحفظ النتائج</strong><p>اختيار الفائزين عشوائيًا من المشاركات المؤهلة.</p></div></section></div>
+<section id="authPanel" class="panel" hidden><h2 id="authTitle">تسجيل الدخول</h2><p id="authSubtitle">أدخل بيانات حسابك</p><div class="tabs" id="authTabs"><button type="button" class="tab active" data-open="login" id="tabLogin">تسجيل الدخول</button><button type="button" class="tab" data-open="signup" id="tabSignup">حساب جديد</button></div>
+<form id="authForm" autocomplete="on"><div id="storeField" hidden><label for="store">اسم المتجر</label><input class="field" id="store" name="organization" type="text" maxlength="150" autocomplete="organization" placeholder="اسم متجرك"></div>
+<div id="emailField"><label for="email">البريد الإلكتروني</label><input class="field" id="email" name="username" type="email" inputmode="email" dir="ltr" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="name@example.com" required></div>
+<div id="passwordField"><label for="password" id="passwordLabel">كلمة المرور</label><input class="field" id="password" name="password" type="password" autocomplete="current-password" minlength="1" required placeholder="كلمة المرور"><label class="checkbox-label note"><input id="showPass" type="checkbox"> إظهار كلمة المرور</label></div>
+<button class="btn full form-submit" id="submitBtn" type="submit">تسجيل الدخول</button></form>
+<div class="inline-flex"><button type="button" id="forgot" class="linkbtn" data-open="forgot">نسيت كلمة المرور؟</button><button type="button" id="backLogin" class="linkbtn" data-open="login" hidden>العودة لتسجيل الدخول</button></div><div id="authMsg" class="notice" role="status" aria-live="polite" hidden></div></section>
+<section id="dashboard" hidden>
+<div class="welcome"><div><span class="eyebrow">لوحة إدارة التاجر</span><h1 id="welcomeName">مرحبًا في رافورا</h1><small id="merchantEmail"></small></div><button type="button" class="btn" id="createContestTop">+ إنشاء مسابقة</button></div>
+<div id="dashMsg" class="notice" role="status" aria-live="polite" hidden></div>
+<div class="grid3"><div class="stat"><div class="value" id="statContests">—</div><span>المسابقات</span></div><div class="stat"><div class="value" id="statParticipants">—</div><span>المشاركون في جميع مسابقاتك</span></div><div class="stat"><div class="value" id="statDrawn">—</div><span>المسابقات المسحوب عليها</span></div></div>
+<div class="dashboard-nav"><button type="button" class="tab active" data-view="list">مسابقاتي</button><button type="button" class="tab" data-view="editor">إنشاء مسابقة</button><button type="button" class="tab" data-view="settings">إعدادات المتجر</button></div>
+<div id="dashList"><div class="section-head"><div><h2>مسابقاتي</h2><p>كل تاجر يشاهد مسابقاته فقط.</p></div><button id="refreshContests" type="button" class="btn secondary sm">تحديث القائمة</button></div><div id="contestList" class="list"><div class="empty">جاري تحميل المسابقات…</div></div></div>
+<div id="dashEditor" hidden><div class="section-head"><h2 id="editorHeading">إنشاء مسابقة جديدة</h2><button id="cancelEditor" class="btn secondary sm" type="button">العودة إلى مسابقاتي</button></div>
+<form id="contestForm" class="card"><div class="grid2"><div><label for="contestTitle">عنوان المسابقة *</label><input class="field" id="contestTitle" name="contest_title" maxlength="140" required placeholder="مثال: السحب على قسيمة 500 ريال"></div><div><label for="contestPrize">الجائزة *</label><input class="field" id="contestPrize" name="prize" maxlength="250" required placeholder="مثال: قسيمة شرائية بقيمة 500 ريال"></div></div>
+<label for="contestDesc">وصف المسابقة</label><textarea class="field" id="contestDesc" maxlength="2000" placeholder="اكتب وصفًا قصيرًا للمسابقة"></textarea>
+<div class="grid2"><div><label for="contestStart">بداية التسجيل *</label><input class="field" id="contestStart" type="datetime-local" required></div><div><label for="contestEnd">نهاية التسجيل *</label><input class="field" id="contestEnd" type="datetime-local" required></div></div>
+<div class="grid2"><div><label for="contestWinners">عدد الفائزين *</label><input class="field" id="contestWinners" type="number" min="1" max="1000" value="1" required></div><div><label for="contestColor">لون صفحة المشاركة</label><input class="field" id="contestColor" type="color" value="#7c3aed" style="height:49px;padding:5px"></div></div>
+<label for="contestTerms">شروط المسابقة (اختياري)</label><textarea class="field" id="contestTerms" rows="4" maxlength="10000" placeholder="مثال: يسمح بمشاركة واحدة لكل رقم جوال، ويجب الإجابة على جميع الأسئلة المطلوبة."></textarea>
+<div class="divider"></div><div class="space-between"><div><h3>أسئلة المشاركين (اختيارية)</h3><div class="hint">تستطيع إضافة أسئلة نصية أو اختيار متعدد أو نعم/لا.</div></div><button type="button" class="btn secondary sm" id="addQuestion">+ أضف سؤالًا</button></div><div id="questionList" class="stack" style="margin-top:14px"></div>
+<div class="divider"></div><p class="hint">بعد الحفظ يمكنك نشر المسابقة من صفحة مسابقاتي؛ لن يبدأ قبول المشاركات إلا في موعد البداية.</p><button type="submit" class="btn full" id="saveContest">حفظ المسابقة</button></form></div>
+<div id="dashDetails" hidden><div class="section-head"><h2 id="detailsTitle">تفاصيل المسابقة</h2><button type="button" class="btn secondary sm" id="detailsBack">العودة للمسابقات</button></div><div class="card stack"><div class="space-between"><div><span class="status" id="detailsStatus">مسودة</span><p id="detailsPrize" class="muted"></p><small id="detailsDates"></small></div><button type="button" id="editContest" class="btn secondary sm">تعديل المسابقة</button></div>
+<label for="contestLink">رابط تسجيل المشاركين</label><input id="contestLink" class="field copyfield" type="text" readonly><div class="inline-flex"><button type="button" id="copyLink" class="btn sm">نسخ رابط المشاركين</button><a id="visitLink" class="btn secondary sm" href="#" target="_blank" rel="noopener">فتح صفحة المشاركين</a></div>
+<div id="detailsMsg" class="notice" role="status" aria-live="polite" hidden></div><div class="inline-flex" id="detailsActions"><button type="button" id="publishContest" class="btn">نشر المسابقة</button><button type="button" id="closeContest" class="btn secondary">إغلاق التسجيل</button><button type="button" id="drawContest" class="btn">🎉 إجراء السحب</button><button type="button" id="exportContest" class="btn secondary">تصدير المشاركين CSV</button></div>
+<div class="grid2"><div class="stat"><div class="value" id="detailsCount">—</div><span>عدد المشاركين</span></div><div class="stat"><div class="value" id="detailsEligible">—</div><span>المشاركون المؤهلون</span></div></div>
+<h3>الفائزون</h3><div id="winnerList" class="list"><div class="empty">لم يتم السحب بعد</div></div><h3>المشاركون</h3><div id="participantsList" class="table-wrap"></div><div class="space-between"><span id="participantsPageStatus" class="hint"></span><button type="button" id="moreParticipants" class="btn secondary sm">عرض المزيد</button></div>
+</div></div>
+<div id="dashSettings" hidden><div class="section-head"><h2>إعدادات المتجر</h2></div><form id="settingsForm" class="card"><label for="settingsStore">اسم متجرك</label><input class="field" type="text" id="settingsStore" maxlength="150" minlength="2" required><p class="hint">هذا الاسم سيظهر للمتسابقين على رابط المشاركة.</p><button class="btn" type="submit">حفظ اسم المتجر</button></form></div>
+</section>
+<section id="publicContest" class="preview-box" hidden><div style="text-align:center"><img id="publicLogo" class="public-logo" alt="شعار المتجر" hidden><span class="eyebrow" id="publicStore">رافورا</span><h1 id="publicTitle" style="margin:15px 0 7px">المسابقة</h1><p id="publicDesc" class="subtitle"></p><img id="publicPrizeImg" class="public-prize" alt="صورة الجائزة" hidden><h2 id="publicPrize" style="font-size:20px"></h2><p id="publicDates" class="hint"></p></div>
+<div id="publicMsg" class="notice" hidden aria-live="polite"></div><form id="publicForm" hidden><label for="publicName">الاسم الكامل *</label><input class="field" id="publicName" name="full-name" autocomplete="name" maxlength="150" required placeholder="اسمك الكامل">
+<label for="publicPhone">رقم الجوال *</label><input class="field" id="publicPhone" name="tel" type="tel" inputmode="tel" autocomplete="tel" maxlength="23" required dir="ltr" placeholder="05XXXXXXXX أو رقم دولي">
+<div id="publicQuestions"></div><div id="publicTerms" hidden><label>شروط المسابقة</label><div id="publicTermsText" class="terms"></div><label class="checkbox-label"><input type="checkbox" id="acceptTerms"> قرأت شروط المسابقة وأوافق عليها *</label></div>
+<label class="checkbox-label"><input type="checkbox" id="acceptPrivacy" required> أوافق على استخدام بياناتي لغرض إدارة هذه المسابقة والتواصل عند الفوز *</label>
+<button type="submit" class="btn full form-submit" id="joinContest">تسجيل المشاركة</button><p class="hint">مشاركة واحدة لكل رقم جوال في المسابقة. لا تظهر بياناتك للمشاركين الآخرين.</p></form>
+<p style="text-align:center"><a href="./">العودة إلى رافورا</a></p></section>
+<noscript><p class="notice error">لتشغيل الموقع يرجى تفعيل JavaScript في المتصفح.</p></noscript>
+</main><footer>© 2026 RAVORA | رافورا — جميع الحقوق محفوظة</footer>
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
- const $=id=>document.getElementById(id); let mode='login', recovery=false, busy=false, version=0;
- const base=location.origin+location.pathname;
- function msg(s,kind=''){ $('message').textContent=s;$('message').className='notice '+kind;$('message').hidden=!s; }
- function show(type,scroll=true){ if(busy|| (recovery && type!=='recovery'))return;mode=type; $('authPanel').hidden=false;$('accountPanel').hidden=true;$('landing').hidden=true;$('tabs').hidden=['forgot','recovery'].includes(type);$('tabLogin').classList.toggle('active',type==='login');$('tabSignup').classList.toggle('active',type==='signup');$('storeField').hidden=type!=='signup';$('store').required=type==='signup';$('emailField').hidden=type==='recovery';$('email').required=type!=='recovery';$('passwordField').hidden=type==='forgot';$('password').required=type!=='forgot';$('password').minLength=type==='login'?1:8;$('password').autocomplete=type==='login'?'current-password':'new-password';$('passwordLabel').textContent=type==='recovery'?'كلمة المرور الجديدة':'كلمة المرور';$('forgot').hidden=type!=='login';$('backLogin').hidden=type!=='forgot';const labels={login:['تسجيل الدخول','أدخل بيانات حساب متجرك','تسجيل الدخول'],signup:['إنشاء حساب تاجر','أنشئ ملف متجرك الخاص','إنشاء الحساب'],forgot:['استعادة كلمة المرور','سنرسل رابط الاستعادة إلى بريدك','إرسال رابط الاستعادة'],recovery:['تغيير كلمة المرور','اختر كلمة مرور جديدة لحسابك','حفظ كلمة المرور']};[$('authTitle').textContent,$('authSubtitle').textContent,$('submitBtn').textContent]=labels[type];$('password').value='';$('showPass').checked=false;$('password').type='password';msg('');if(scroll)$('authPanel').scrollIntoView({behavior:'smooth',block:'start'}); }
- document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.open)));$('showPass').addEventListener('change',()=>{$('password').type=$('showPass').checked?'text':'password'});
- if(!window.supabase){show('login',false);msg('تعذر تحميل خدمة تسجيل الدخول. تحقق من اتصالك بالإنترنت وأعد تحميل الصفحة.','error');$('submitBtn').disabled=true;return;}
- const db=window.supabase.createClient('https://qfwlfzpxixwidubphsbt.supabase.co','sb_publishable_rF1d6F1FRgm0CJpxcwvj2g_G3g5Vo-s');
- const errors=e=>{const code=e?.code||'';const raw=e?.message||'';if(code==='invalid_credentials'||raw.includes('Invalid login credentials'))return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';if(code==='email_not_confirmed'||raw.includes('Email not confirmed'))return 'يرجى تأكيد البريد الإلكتروني أولًا.';if(code==='over_email_send_rate_limit'||raw.includes('rate limit'))return 'تم بلوغ حد المحاولات مؤقتًا. حاول مرة أخرى لاحقًا.';if(code==='user_already_exists'||raw.includes('already registered'))return 'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول.';if(code==='weak_password')return 'اختر كلمة مرور أقوى.';if(raw.includes('Database error saving new user'))return 'تعذر إنشاء ملف المتجر في قاعدة البيانات. يرجى مراجعة إعدادات المشروع.';return 'تعذر إتمام الطلب: '+raw;};
- async function account(session){const current=++version;$('navAuth').hidden=true;$('navLogout').hidden=false;$('landing').hidden=true;$('authPanel').hidden=true;$('accountPanel').hidden=false;$('welcome').textContent='مرحبًا بك في رافورا';$('accountEmail').textContent=session.user.email||'';$('profileNote').textContent='جاري التحقق من ملف المتجر…';$('profileNote').className='notice';try{const {data,error}=await db.from('merchants').select('store_name').eq('id',session.user.id).maybeSingle();if(current!==version)return;if(error||!data){$('profileNote').textContent='تم تسجيل الدخول، لكن تعذر العثور على ملف المتجر. تحقق من إعدادات جدول merchants.';$('profileNote').className='notice error';return;}$('welcome').textContent='أهلًا، '+data.store_name;$('profileNote').textContent='تم تسجيل الدخول وحفظ حساب متجرك بنجاح. لوحة إدارة المسابقات ستُضاف في المرحلة التالية.';$('profileNote').className='notice ok';}catch(e){if(current===version){$('profileNote').textContent=errors(e);$('profileNote').className='notice error';}}}
- function signedOut(){version++;$('navLogout').hidden=true;$('navAuth').hidden=false;$('accountPanel').hidden=true;$('landing').hidden=false;$('authPanel').hidden=true;}
- const fragment=new URLSearchParams(location.hash.slice(1));if(fragment.get('type')==='recovery')recovery=true;
- db.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){recovery=true;busy=false;show('recovery',false);return;} if(event==='SIGNED_OUT'){recovery=false;signedOut();return;}if(session&&!recovery&&['INITIAL_SESSION','SIGNED_IN'].includes(event)){setTimeout(()=>{if(!recovery)account(session)},0);} });
- if(recovery)show('recovery',false);else if(fragment.get('error')){show('login',false);msg('رابط التحقق غير صالح أو انتهت صلاحيته.','error');}
- $('authForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;$('submitBtn').disabled=true;msg('جاري تنفيذ الطلب…');const email=$('email').value.trim(),password=$('password').value;try{if(mode==='signup'){const store=$('store').value.trim();if(store.length<2)throw new Error('اسم المتجر غير صالح.');const {data,error}=await db.auth.signUp({email,password,options:{data:{store_name:store},emailRedirectTo:base}});if(error)throw error;if(data.session){await account(data.session);}else{msg('إذا كان البريد متاحًا للتسجيل، ستصلك رسالة لتأكيد الحساب. افتح الرابط ثم سجّل الدخول.','ok');}}else if(mode==='login'){const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;if(data.session)await account(data.session);}else if(mode==='forgot'){const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:base});if(error)throw error;msg('إذا كان البريد مسجلًا، سيصلك رابط لاستعادة كلمة المرور.','ok');}else if(mode==='recovery'){const {error}=await db.auth.updateUser({password});if(error)throw error;recovery=false;const {data}=await db.auth.getSession();if(data.session)await account(data.session);else{busy=false;show('login');msg('تم تحديث كلمة المرور.','ok');}}}catch(e){msg(errors(e),'error');}finally{busy=false;$('submitBtn').disabled=false;$('password').value='';}});
- async function logout(){const {error}=await db.auth.signOut();if(error){$('profileNote').textContent=errors(error);return;}signedOut();} $('logout').addEventListener('click',logout);$('navLogout').addEventListener('click',logout);
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const BASE=location.origin+location.pathname;
+  const PROJECT_URL='https://qfwlfzpxixwidubphsbt.supabase.co';
+  // هذا مفتاح PUBLIC/PUBLISHABLE فقط. لا تضعي service_role أو secret key في HTML.
+  const PUBLISHABLE_KEY='sb_publishable_rF1d6F1FRgm0CJpxcwvj2g_G3g5Vo-s';
+  const publicContestId=new URLSearchParams(location.search).get('contest');
+  let db,session=null,profile=null,contests=[],currentContest=null,editorId=null,authMode='login',busy=false,recovery=false,questions=[],pageOffset=0,participantsLoaded=0,participantsTotal=0,publicQuestions=[];
+  const pageSize=100;
+
+  function notice(id,message='',kind=''){
+    const e=$(id);e.textContent=message;e.className='notice '+kind;e.hidden=!message;
+  }
+  const failMessage=e=>{
+    const s=String(e?.message||e||'حدث خطأ غير متوقع');
+    const code=e?.code||'';
+    if(code==='invalid_credentials'||s.includes('Invalid login credentials'))return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+    if(code==='email_not_confirmed'||s.includes('Email not confirmed'))return 'يرجى تأكيد البريد الإلكتروني من الرسالة المرسلة إليك.';
+    if(code==='over_email_send_rate_limit'||s.toLowerCase().includes('rate limit'))return 'عدد المحاولات كبير حاليًا. حاولي مرة أخرى لاحقًا.';
+    if(code==='weak_password')return 'كلمة المرور ضعيفة، اختاري كلمة مرور أقوى.';
+    if(s.includes('Database error saving new user'))return 'تعذر إنشاء ملف التاجر. افحصي مشغّل إنشاء الحساب في Supabase.';
+    if(code==='23505')return 'هذه البيانات مكررة بالفعل.';
+    if(code==='42501'||s.includes('permission denied'))return 'لا توجد صلاحية لهذه العملية في قاعدة البيانات.';
+    return 'تعذرت العملية: '+s;
+  };
+  function safeDate(iso){return iso?new Date(iso).toLocaleString('ar-SA-u-ca-gregory',{dateStyle:'medium',timeStyle:'short'}):'—';}
+  function dateInputValue(iso){if(!iso)return '';const d=new Date(iso),off=d.getTimezoneOffset()*60000;return new Date(d.getTime()-off).toISOString().slice(0,16);}
+  function make(tag,cls='',textValue){const e=document.createElement(tag);if(cls)e.className=cls;if(textValue!==undefined)e.textContent=textValue;return e;}
+  function empty(el,message){el.replaceChildren(make('div','empty',message));}
+  const statuses={draft:'مسودة',open:'منشورة',closed:'مغلقة',drawn:'تم السحب'};
+  function statusBadge(c){const b=make('span','status '+c.status,statuses[c.status]||c.status);return b;}
+  function contestUrl(id){return BASE+'?contest='+encodeURIComponent(id);}
+  async function copyText(s){
+    try{await navigator.clipboard.writeText(s);return true;}
+    catch(e){window.prompt('انسخي الرابط من هنا:',s);return false;}
+  }
+  function navigate(section){
+    for(const id of ['landing','authPanel','dashboard','publicContest'])$(id).hidden=id!==section;
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+  function updateNav(){
+    $('navAuth').hidden=!!session || !!publicContestId;
+    $('navMember').hidden=!session || !!publicContestId;
+  }
+  function showAuth(mode='login'){
+    if(publicContestId){location.href=BASE;return;}
+    authMode=mode;
+    navigate('authPanel');
+    $('authTabs').hidden=['forgot','recovery'].includes(mode);
+    $('tabLogin').classList.toggle('active',mode==='login');
+    $('tabSignup').classList.toggle('active',mode==='signup');
+    $('storeField').hidden=mode!=='signup';$('store').required=mode==='signup';
+    $('emailField').hidden=mode==='recovery';$('email').required=mode!=='recovery';
+    $('passwordField').hidden=mode==='forgot';$('password').required=mode!=='forgot';
+    $('password').minLength=mode==='login'?1:8;
+    $('password').autocomplete=mode==='login'?'current-password':'new-password';
+    $('passwordLabel').textContent=mode==='recovery'?'كلمة المرور الجديدة':'كلمة المرور';
+    $('forgot').hidden=mode!=='login';$('backLogin').hidden=mode!=='forgot';
+    const labels={login:['تسجيل الدخول','أدخل بيانات حساب متجرك','تسجيل الدخول'],signup:['إنشاء حساب تاجر','أنشئ حساب متجرك في رافورا','إنشاء الحساب'],forgot:['استعادة كلمة المرور','سنرسل رابط استعادة إلى بريدك الإلكتروني','إرسال الرابط'],recovery:['تغيير كلمة المرور','أدخل كلمة المرور الجديدة','حفظ كلمة المرور']};
+    const l=labels[mode];$('authTitle').textContent=l[0];$('authSubtitle').textContent=l[1];$('submitBtn').textContent=l[2];
+    $('password').type='password';$('showPass').checked=false;
+    notice('authMsg');
+  }
+  document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>showAuth(b.dataset.open)));
+  $('showPass').addEventListener('change',()=>{$('password').type=$('showPass').checked?'text':'password';});
+  $('brand').addEventListener('click',e=>{if(session&&!publicContestId){e.preventDefault();openDashboard('list');}});
+  $('navMyDash').addEventListener('click',()=>openDashboard('list'));
+  $('navLogout').addEventListener('click',logout);
+
+  if(!window.supabase){
+    if(publicContestId){navigate('publicContest');notice('publicMsg','تعذر تحميل خدمة التسجيل. يرجى إعادة تحميل الصفحة بعد التأكد من الإنترنت.','error');}
+    else{showAuth('login');notice('authMsg','تعذر تحميل خدمة تسجيل الدخول، يرجى تحديث الصفحة.','error');$('submitBtn').disabled=true;}
+    return;
+  }
+  db=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
+
+  $('authForm').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;busy=true;$('submitBtn').disabled=true;
+    const email=$('email').value.trim(),password=$('password').value;
+    notice('authMsg','جاري تنفيذ الطلب…');
+    try{
+      if(authMode==='signup'){
+        const store=$('store').value.trim();if(store.length<2)throw new Error('أدخلي اسم متجر صحيحًا.');
+        const {data,error}=await db.auth.signUp({email,password,options:{data:{store_name:store},emailRedirectTo:BASE}});
+        if(error)throw error;
+        if(data.session){session=data.session;await openDashboard('list');}
+        else notice('authMsg','تم إرسال طلب التسجيل. إذا وصلتك رسالة تأكيد البريد الإلكتروني افتحيها، ثم سجلي الدخول.','ok');
+      } else if(authMode==='login'){
+        const {data,error}=await db.auth.signInWithPassword({email,password});
+        if(error)throw error;if(data.session){session=data.session;await openDashboard('list');}
+      } else if(authMode==='forgot'){
+        const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:BASE});
+        if(error)throw error;notice('authMsg','إذا كان هذا البريد مسجلًا فستصلك رسالة لاستعادة كلمة المرور.','ok');
+      } else if(authMode==='recovery'){
+        const {error}=await db.auth.updateUser({password});
+        if(error)throw error;recovery=false;
+        notice('authMsg','تم تغيير كلمة المرور.','ok');
+        const {data}=await db.auth.getSession();session=data.session;
+        if(session)await openDashboard('list');else showAuth('login');
+      }
+      // لا نمسح كلمة المرور مباشرة بعد إرسال النموذج؛ بعض مديري كلمات المرور
+      // يحتاجون رؤية الحقول الصحيحة لتقديم خيار الحفظ (القرار للمتصفح).
+    }catch(err){notice('authMsg',failMessage(err),'error');}
+    finally{busy=false;$('submitBtn').disabled=false;}
+  });
+  async function logout(){
+    try{const {error}=await db.auth.signOut();if(error)throw error;session=null;profile=null;contests=[];updateNav();navigate('landing');}
+    catch(e){notice('dashMsg',failMessage(e),'error');}
+  }
+  db.auth.onAuthStateChange((event,s)=>{
+    if(publicContestId)return;
+    if(event==='PASSWORD_RECOVERY'){
+      recovery=true;session=s;updateNav();setTimeout(()=>showAuth('recovery'),0);return;
+    }
+    if(event==='SIGNED_OUT'){
+      session=null;profile=null;updateNav();if(!recovery)navigate('landing');return;
+    }
+    if(s&&!recovery&&['INITIAL_SESSION','SIGNED_IN'].includes(event)){
+      session=s;updateNav();setTimeout(()=>{if(!recovery)openDashboard('list');},0);
+    }
+    if(event==='INITIAL_SESSION'&&!s&&!recovery){session=null;updateNav();navigate('landing');}
+  });
+
+  async function loadProfile(){
+    if(!session?.user)throw new Error('يجب تسجيل الدخول أولًا.');
+    const {data,error}=await db.from('merchants').select('id,store_name').eq('id',session.user.id).maybeSingle();
+    if(error)throw error;
+    if(!data)throw new Error('ملف المتجر غير موجود في جدول merchants.');
+    profile=data;
+    $('welcomeName').textContent='أهلًا، '+data.store_name;
+    $('merchantEmail').textContent=session.user.email||'';
+    $('settingsStore').value=data.store_name;
+  }
+  async function openDashboard(view='list'){
+    if(!session?.user){showAuth('login');return;}
+    updateNav();navigate('dashboard');
+    try{
+      if(!profile)await loadProfile();
+      notice('dashMsg');
+      if(view==='list')await loadContests();
+      showView(view);
+    }catch(e){notice('dashMsg',failMessage(e),'error');showView('list');}
+  }
+  function showView(view){
+    const ids={list:'dashList',editor:'dashEditor',details:'dashDetails',settings:'dashSettings'};
+    Object.entries(ids).forEach(([key,id])=>{$(id).hidden=key!==view;});
+    document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+    $('dashboard').hidden=false;
+  }
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
+    const view=b.dataset.view;
+    if(view==='editor')startEditor();else if(view==='list')openDashboard('list');else showView(view);
+  }));
+  $('createContestTop').addEventListener('click',()=>startEditor());
+  $('refreshContests').addEventListener('click',loadContests);
+  $('cancelEditor').addEventListener('click',()=>openDashboard('list'));
+  $('detailsBack').addEventListener('click',()=>openDashboard('list'));
+
+  async function loadContests(){
+    if(!session?.user)return;
+    const {data,error}=await db.from('contests')
+      .select('id,merchant_id,title,description,prize,logo_url,prize_image,theme_color,terms,questions,winner_count,starts_at,ends_at,status,created_at')
+      .eq('merchant_id',session.user.id).order('created_at',{ascending:false});
+    if(error){notice('dashMsg',failMessage(error),'error');return;}
+    contests=data||[];
+    $('statContests').textContent=contests.length.toLocaleString('ar-SA');
+    $('statDrawn').textContent=contests.filter(c=>c.status==='drawn').length.toLocaleString('ar-SA');
+    $('statParticipants').textContent='—';
+    renderContestList();
+    if(contests.length){
+      const {count,error:countError}=await db.from('participants')
+        .select('id',{count:'exact',head:true}).in('contest_id',contests.map(c=>c.id));
+      if(!countError)$('statParticipants').textContent=(count||0).toLocaleString('ar-SA');
+    }else $('statParticipants').textContent='0';
+  }
+  function renderContestList(){
+    const list=$('contestList');list.replaceChildren();
+    if(!contests.length){empty(list,'ما عندك مسابقات حتى الآن. اضغطي «إنشاء مسابقة» للبدء.');return;}
+    for(const c of contests){
+      const card=make('article','contest-card');
+      const head=make('div','space-between');
+      const titleBox=make('div');titleBox.append(make('h3','',c.title),make('p','',c.prize||'بدون جائزة مدخلة'));
+      head.append(titleBox,statusBadge(c));
+      const dates=make('div','hint','التسجيل: '+safeDate(c.starts_at)+' — '+safeDate(c.ends_at));
+      const actions=make('div','inline-flex');
+      const manage=make('button','btn sm','إدارة المسابقة');manage.type='button';manage.addEventListener('click',()=>showDetails(c.id));actions.append(manage);
+      if(c.status!=='drawn'){
+        const edit=make('button','btn secondary sm','تعديل');edit.type='button';edit.addEventListener('click',()=>startEditor(c));actions.append(edit);
+      }
+      if(c.status!=='draft'){
+        const link=make('button','btn secondary sm','نسخ رابط المشاركة');link.type='button';link.addEventListener('click',async()=>{await copyText(contestUrl(c.id));link.textContent='تم طلب نسخ الرابط';setTimeout(()=>link.textContent='نسخ رابط المشاركة',1800);});actions.append(link);
+      }
+      card.append(head,dates,actions);list.append(card);
+    }
+  }
+
+  function questionId(){return 'q_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);}
+  function startEditor(c=null){
+    editorId=c?.id||null;questions=Array.isArray(c?.questions)?structuredClone(c.questions):[];
+    $('editorHeading').textContent=c?'تعديل المسابقة':'إنشاء مسابقة جديدة';
+    $('contestTitle').value=c?.title||'';
+    $('contestPrize').value=c?.prize||'';
+    $('contestDesc').value=c?.description||'';
+    const now=new Date(),tomorrow=new Date(now.getTime()+86400000);
+    $('contestStart').value=c?dateInputValue(c.starts_at):dateInputValue(now.toISOString());
+    $('contestEnd').value=c?dateInputValue(c.ends_at):dateInputValue(tomorrow.toISOString());
+    $('contestWinners').value=c?.winner_count||1;
+    $('contestColor').value=/^#[\da-fA-F]{6}$/.test(c?.theme_color||'')?c.theme_color:'#7c3aed';
+    $('contestTerms').value=c?.terms||'';
+    renderQuestionEditor();showView('editor');$('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  $('addQuestion').addEventListener('click',()=>{
+    if(questions.length>=20){notice('dashMsg','الحد الأقصى في النسخة الحالية 20 سؤالًا.','warn');return;}
+    questions.push({id:questionId(),title:'',type:'text',required:true,options:[]});renderQuestionEditor();
+  });
+  function renderQuestionEditor(){
+    const list=$('questionList');list.replaceChildren();
+    for(let i=0;i<questions.length;i++){
+      const q=questions[i],block=make('div','question');
+      const head=make('div','inline-flex');head.append(make('h3','',`السؤال ${i+1}`));
+      const del=make('button','btn danger sm','حذف السؤال');del.type='button';del.addEventListener('click',()=>{questions.splice(i,1);renderQuestionEditor();});head.append(del);
+      const label=make('label','','نص السؤال');const title=make('input','field');title.type='text';title.maxLength=300;title.value=q.title??q.q??'';title.placeholder='مثال: كيف تعرفت على متجرنا؟';title.addEventListener('input',()=>q.title=title.value);
+      const typelabel=make('label','','نوع الإجابة');const type=make('select','field');
+      [['text','إجابة نصية'],['choice','اختيار من متعدد'],['yesno','نعم / لا']].forEach(([value,t])=>{const opt=make('option','',t);opt.value=value;type.append(opt);});
+      type.value=q.type||'text';type.addEventListener('change',()=>{q.type=type.value;renderQuestionEditor();});
+      block.append(head,label,title,typelabel,type);
+      if(type.value==='choice'){
+        const optlabel=make('label','','خيارات الإجابة (كل خيار في سطر)');
+        const options=make('textarea','field');options.rows=3;
+        options.placeholder='سناب شات\nإنستغرام\nتيك توك';
+        options.value=Array.isArray(q.options)?q.options.join('\n'):String(q.options||'');
+        options.addEventListener('input',()=>q.options=options.value.split('\n'));
+        block.append(optlabel,options);
+      }
+      const required=make('label','checkbox-label');
+      const check=make('input');check.type='checkbox';check.checked=q.required!==false;check.addEventListener('change',()=>q.required=check.checked);
+      required.append(check,document.createTextNode('الإجابة إلزامية'));block.append(required);list.append(block);
+    }
+  }
+  $('contestForm').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;
+    try{
+      const start=new Date($('contestStart').value),end=new Date($('contestEnd').value);
+      if(!Number.isFinite(start.getTime())||!Number.isFinite(end.getTime())||end<=start)throw new Error('تاريخ النهاية يجب أن يكون بعد تاريخ البداية.');
+      const n=Number($('contestWinners').value);
+      if(!Number.isInteger(n)||n<1||n>1000)throw new Error('عدد الفائزين يجب أن يكون بين 1 و1000.');
+      if(!session?.user)throw new Error('انتهت جلسة الدخول.');
+      const normalized=questions.map(q=>{
+        const id=String(q.id||questionId());const title=String(q.title??q.q??'').trim();
+        const type=['choice','text','yesno'].includes(q.type)?q.type:'text';
+        const options=type==='choice'?(Array.isArray(q.options)?q.options:String(q.options||'').split('\n')).map(x=>String(x).trim()).filter(Boolean):[];
+        if(title.length<2||title.length>300)throw new Error('يرجى كتابة نص صحيح لكل سؤال.');
+        if(type==='choice'&&(options.length<2||options.length>20))throw new Error('الاختيار المتعدد يحتاج من 2 إلى 20 خيارًا.');
+        return {id,title,type,options,required:q.required!==false};
+      });
+      const payload={title:$('contestTitle').value.trim(),prize:$('contestPrize').value.trim(),description:$('contestDesc').value.trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),winner_count:n,theme_color:$('contestColor').value,terms:$('contestTerms').value.trim(),questions:normalized};
+      if(!payload.title||!payload.prize)throw new Error('عنوان المسابقة والجائزة مطلوبان.');
+      const wasEdit=!!editorId;
+      busy=true;$('saveContest').disabled=true;$('saveContest').textContent='جاري الحفظ…';notice('dashMsg');
+      const query=wasEdit?db.from('contests').update(payload).eq('id',editorId):db.from('contests').insert(payload);
+      const {data,error}=await query.select('id').single();if(error)throw error;
+      await loadContests();await showDetails(data.id);notice('detailsMsg',wasEdit?'تم حفظ التعديلات.':'تم إنشاء المسابقة كمسودة. اضغطي «نشر المسابقة» لتفعيل رابط المشاركين.','ok');
+    }catch(err){notice('dashMsg',failMessage(err),'error');$('dashboard').scrollIntoView({behavior:'smooth'});}
+    finally{busy=false;$('saveContest').disabled=false;$('saveContest').textContent='حفظ المسابقة';}
+  });
+
+  async function showDetails(id){
+    currentContest=contests.find(c=>c.id===id);
+    if(!currentContest){await loadContests();currentContest=contests.find(c=>c.id===id);}
+    if(!currentContest){notice('dashMsg','تعذر العثور على المسابقة.','error');return;}
+    const c=currentContest;
+    showView('details');
+    $('detailsTitle').textContent=c.title;
+    $('detailsStatus').replaceWith(statusBadgeWithId(c));
+    $('detailsPrize').textContent='الجائزة: '+(c.prize||'—');
+    $('detailsDates').textContent='من '+safeDate(c.starts_at)+' إلى '+safeDate(c.ends_at);
+    $('contestLink').value=contestUrl(c.id);$('visitLink').href=contestUrl(c.id);
+    $('editContest').hidden=c.status==='drawn';
+    $('publishContest').hidden=c.status!=='draft';
+    $('closeContest').hidden=c.status!=='open';
+    $('drawContest').hidden=!(c.status==='closed'||(c.status==='open'&&new Date(c.ends_at).getTime()<=Date.now()));
+    $('copyLink').disabled=c.status==='draft';
+    $('visitLink').style.pointerEvents=c.status==='draft'?'none':'';
+    $('visitLink').style.opacity=c.status==='draft'?'0.5':'1';
+    notice('detailsMsg',c.status==='draft'?'هذه مسودة. انشري المسابقة أولًا حتى يصبح رابط التسجيل متاحًا للعملاء.':'',c.status==='draft'?'warn':'');
+    $('detailsCount').textContent='—';$('detailsEligible').textContent='—';
+    pageOffset=0;participantsLoaded=0;participantsTotal=0;
+    await Promise.all([loadParticipantCounts(c),loadWinners(c),loadParticipants(c,true)]);
+  }
+  function statusBadgeWithId(c){const span=statusBadge(c);span.id='detailsStatus';return span;}
+  $('copyLink').addEventListener('click',async()=>{
+    if(!currentContest||currentContest.status==='draft')return;
+    if(await copyText(contestUrl(currentContest.id)))notice('detailsMsg','تم نسخ الرابط، يمكن للتاجر نشره في الواتساب أو السناب أو الإنستغرام.','ok');
+  });
+  $('editContest').addEventListener('click',()=>{if(currentContest&&currentContest.status!=='drawn')startEditor(currentContest);});
+  async function changeStatus(next){
+    if(!currentContest)return;
+    try{
+      const {error}=await db.from('contests').update({status:next}).eq('id',currentContest.id);
+      if(error)throw error;await loadContests();await showDetails(currentContest.id);
+      notice('detailsMsg',next==='open'?'تم نشر المسابقة. يمكنك نسخ رابط التسجيل وإرساله للعملاء.':'تم إغلاق التسجيل. يمكنك الآن إجراء السحب.','ok');
+    }catch(e){notice('detailsMsg',failMessage(e),'error');}
+  }
+  $('publishContest').addEventListener('click',()=>changeStatus('open'));
+  $('closeContest').addEventListener('click',()=>{if(confirm('هل تريدين إغلاق التسجيل؟ لن يتمكن العملاء من التسجيل بعد الإغلاق.'))changeStatus('closed');});
+  $('drawContest').addEventListener('click',async()=>{
+    if(!currentContest)return;
+    if(!confirm(`هل تريدين إجراء سحب نهائي لا يمكن إعادته لاختيار ${currentContest.winner_count} فائز/فائزين؟`))return;
+    $('drawContest').disabled=true;
+    try{
+      const {data,error}=await db.rpc('draw_winners',{p_contest_id:currentContest.id});
+      if(error)throw error;
+      await loadContests();await showDetails(currentContest.id);
+      notice('detailsMsg',`تم السحب بنجاح وحفظ النتيجة. عدد المشاركين المؤهلين وقت السحب: ${data?.participant_count??'—'}.`,'ok');
+    }catch(e){notice('detailsMsg',failMessage(e),'error');}finally{$('drawContest').disabled=false;}
+  });
+  async function loadParticipantCounts(c){
+    const [all,eligible]=await Promise.all([
+      db.from('participants').select('id',{count:'exact',head:true}).eq('contest_id',c.id),
+      db.from('participants').select('id',{count:'exact',head:true}).eq('contest_id',c.id).eq('eligible',true)
+    ]);
+    if(all.error)notice('detailsMsg',failMessage(all.error),'error');
+    $('detailsCount').textContent=all.error?'—':(all.count||0).toLocaleString('ar-SA');
+    $('detailsEligible').textContent=eligible.error?'—':(eligible.count||0).toLocaleString('ar-SA');
+  }
+  async function loadWinners(c){
+    const list=$('winnerList');
+    const {data,error}=await db.from('winners').select('winner_rank,participant_id,created_at').eq('contest_id',c.id).order('winner_rank',{ascending:true});
+    if(error){empty(list,failMessage(error));return;}
+    if(!data?.length){empty(list,'لم يتم إعلان فائزين بعد.');return;}
+    const ids=data.map(r=>r.participant_id);
+    const {data:people,error:pe}=await db.from('participants').select('id,full_name,phone').in('id',ids).eq('contest_id',c.id);
+    if(pe){empty(list,failMessage(pe));return;}
+    const lookup=new Map((people||[]).map(p=>[p.id,p]));list.replaceChildren();
+    for(const w of data){const person=lookup.get(w.participant_id);const item=make('div','contest-card');
+      item.append(make('strong','',`🏆 الفائز رقم ${w.winner_rank}: ${person?.full_name||'غير متاح'}`),make('div','hint',`الجوال: ${person?.phone||'—'} | تاريخ السحب: ${safeDate(w.created_at)}`));list.append(item);
+    }
+  }
+  async function loadParticipants(c,reset=false){
+    if(reset){pageOffset=0;participantsLoaded=0;participantsTotal=0;$('participantsList').replaceChildren();}
+    $('moreParticipants').disabled=true;$('participantsPageStatus').textContent='جاري تحميل المشاركين…';
+    try{
+      const {data,error,count}=await db.from('participants')
+        .select('id,full_name,phone,answers,eligible,created_at',{count:'exact'})
+        .eq('contest_id',c.id).order('created_at',{ascending:false})
+        .range(pageOffset,pageOffset+pageSize-1);
+      if(error)throw error;
+      participantsTotal=count||0;participantsLoaded+=(data||[]).length;pageOffset+=pageSize;
+      let table=$('participantsTable');
+      if(!table){
+        table=make('table','data-table');table.id='participantsTable';
+        const thead=make('thead'),tr=make('tr');
+        for(const s of ['الاسم','الجوال','الإجابات','التسجيل'])tr.append(make('th','',s));
+        thead.append(tr);table.append(thead,make('tbody'));$('participantsList').append(table);
+      }
+      const tbody=table.querySelector('tbody');
+      const qnames=new Map((c.questions||[]).map(q=>[String(q.id),q.title||q.q||q.id]));
+      for(const p of data||[]){
+        const row=make('tr');
+        const answerText=Object.entries(p.answers||{}).map(([key,val])=>`${qnames.get(key)||'سؤال'}: ${String(val)}`).join(' | ')||'—';
+        row.append(make('td','',p.full_name),make('td','code',p.phone),make('td','answers-cell',answerText),make('td','',safeDate(p.created_at)));
+        tbody.append(row);
+      }
+      if(!participantsTotal){$('participantsList').replaceChildren(make('div','empty','لا توجد مشاركات حتى الآن.'));}
+      $('participantsPageStatus').textContent=`المعروض ${participantsLoaded} من ${participantsTotal} مشارك`;
+      $('moreParticipants').hidden=participantsLoaded>=participantsTotal;
+    }catch(e){notice('detailsMsg',failMessage(e),'error');$('participantsPageStatus').textContent='حدث خطأ أثناء تحميل المشاركين.';}
+    finally{$('moreParticipants').disabled=false;}
+  }
+  $('moreParticipants').addEventListener('click',()=>{if(currentContest)loadParticipants(currentContest);});
+  function csvCell(v){let s=String(v??'');if(/^[\s]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+  $('exportContest').addEventListener('click',async()=>{
+    if(!currentContest)return;
+    const btn=$('exportContest');btn.disabled=true;btn.textContent='جاري تجهيز الملف…';
+    try{
+      const c=currentContest,q=Array.isArray(c.questions)?c.questions:[];
+      const headings=['الاسم الكامل','رقم الجوال','تاريخ التسجيل','مؤهل للسحب',...q.map(a=>a.title||a.q||a.id)];
+      const lines=[headings.map(csvCell).join(',')];
+      let off=0,total=0;
+      while(true){
+        const {data,error}=await db.from('participants').select('full_name,phone,created_at,eligible,answers').eq('contest_id',c.id).order('created_at',{ascending:true}).range(off,off+999);
+        if(error)throw error;
+        if(!data?.length)break;
+        for(const p of data){lines.push([p.full_name,p.phone,safeDate(p.created_at),p.eligible?'نعم':'لا',...q.map(x=>p.answers?.[x.id]||'')].map(csvCell).join(','));}
+        total+=data.length;off+=data.length;if(data.length<1000)break;
+        if(total>=100000)throw new Error('التصدير أكبر من 100 ألف سجل. يلزم تصدير على دفعات من الخادم.');
+      }
+      const blob=new Blob(['\ufeff',lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+      const url=URL.createObjectURL(blob),a=make('a');a.href=url;a.download='RAVORA-'+c.id+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+      notice('detailsMsg',`تم إعداد ملف يحتوي على ${total} مشارك.`,'ok');
+    }catch(e){notice('detailsMsg',failMessage(e),'error');}
+    finally{btn.disabled=false;btn.textContent='تصدير المشاركين CSV';}
+  });
+  $('settingsForm').addEventListener('submit',async e=>{
+    e.preventDefault();const name=$('settingsStore').value.trim();if(name.length<2){notice('dashMsg','اسم المتجر قصير جدًا.','error');return;}
+    try{const {error}=await db.from('merchants').update({store_name:name}).eq('id',session.user.id);if(error)throw error;profile.store_name=name;$('welcomeName').textContent='أهلًا، '+name;notice('dashMsg','تم تحديث اسم المتجر.','ok');}
+    catch(err){notice('dashMsg',failMessage(err),'error');}
+  });
+
+  // الصفحة العامة: رمز UUID للمسابقة فقط، لا تكشف أسماء أو أرقام المسجلين.
+  async function initPublicContest(){
+    navigate('publicContest');$('navAuth').hidden=true;$('navMember').hidden=true;
+    if(!/^[a-f0-9-]{36}$/i.test(publicContestId||'')){notice('publicMsg','رابط المسابقة غير صالح.','error');return;}
+    const {data,error}=await db.rpc('get_contest',{p_contest_id:publicContestId});
+    if(error){notice('publicMsg',failMessage(error),'error');return;}
+    if(!data){notice('publicMsg','المسابقة غير موجودة أو لم يتم نشرها بعد.','error');return;}
+    $('publicStore').textContent=data.store_name||'المتجر';
+    $('publicTitle').textContent=data.title||'المسابقة';
+    $('publicDesc').textContent=data.description||'';
+    $('publicPrize').textContent='🎁 الجائزة: '+(data.prize||'سيتم تحديد الجائزة');
+    $('publicDates').textContent='التسجيل من '+safeDate(data.starts_at)+' إلى '+safeDate(data.ends_at);
+    const hex=/^#[0-9a-fA-F]{6}$/.test(data.theme_color||'')?data.theme_color:'#7c3aed';
+    $('publicContest').style.borderTop='5px solid '+hex;
+    const showImage=(id,url)=>{if(typeof url==='string'&&/^https:\/\//i.test(url)){const img=$(id);img.src=url;img.hidden=false;img.onerror=()=>{img.hidden=true;};}};
+    showImage('publicLogo',data.logo_url);showImage('publicPrizeImg',data.prize_image);
+    const now=Date.now();
+    if(data.status!=='open'){notice('publicMsg','التسجيل في هذه المسابقة مغلق.','warn');return;}
+    if(now<new Date(data.starts_at).getTime()){notice('publicMsg','التسجيل لم يبدأ بعد.','warn');return;}
+    if(now>=new Date(data.ends_at).getTime()){notice('publicMsg','انتهى موعد التسجيل في هذه المسابقة.','warn');return;}
+    $('publicForm').hidden=false;
+    $('publicTerms').hidden=!String(data.terms||'').trim();
+    $('publicTermsText').textContent=data.terms||'';
+    $('acceptTerms').required=!$('publicTerms').hidden;
+    const form=$('publicQuestions');form.replaceChildren();publicQuestions=[];
+    for(const q of Array.isArray(data.questions)?data.questions:[]){
+      if(!q||!q.id)continue;
+      const id=String(q.id),type=q.type||'text';
+      const fieldset=make('fieldset','answers-group');const legend=make('legend','',String(q.title||q.q||'السؤال')+(q.required?' *':''));fieldset.append(legend);
+      if(type==='choice'||type==='yesno'){
+        const opts=type==='yesno'?['نعم','لا']:(Array.isArray(q.options)?q.options:[]);
+        const inputs=[];
+        for(const option of opts){
+          const label=make('label');const input=make('input');input.type='radio';input.name='question_'+id;input.value=String(option);input.required=!!q.required;
+          label.append(input,document.createTextNode(' '+String(option)));fieldset.append(label);inputs.push(input);
+        }
+        publicQuestions.push({id,type,inputs,required:!!q.required});
+      }else{
+        const input=make('input','field');input.type='text';input.maxLength=2000;input.required=!!q.required;input.placeholder='اكتب إجابتك هنا';fieldset.append(input);
+        publicQuestions.push({id,type,input,required:!!q.required});
+      }
+      form.append(fieldset);
+    }
+  }
+  $('publicForm').addEventListener('submit',async e=>{
+    e.preventDefault();if(busy)return;
+    const answers={};for(const q of publicQuestions){
+      if(q.type==='text')answers[q.id]=q.input.value.trim();
+      else answers[q.id]=q.inputs.find(a=>a.checked)?.value||'';
+    }
+    const btn=$('joinContest');btn.disabled=true;busy=true;notice('publicMsg','جاري تسجيل المشاركة…');
+    try{
+      const {data,error}=await db.rpc('register_participant',{
+        p_contest_id:publicContestId,
+        p_full_name:$('publicName').value.trim(),p_phone:$('publicPhone').value.trim(),p_answers:answers,
+        p_accepted_terms:$('acceptTerms').checked,p_accepted_privacy:$('acceptPrivacy').checked
+      });
+      if(error)throw error;
+      $('publicForm').hidden=true;
+      notice('publicMsg',data?.message||'تم استلام مشاركتك بنجاح.','ok');
+    }catch(err){notice('publicMsg',failMessage(err),'error');}
+    finally{btn.disabled=false;busy=false;}
+  });
+
+  // صفحة المسابقة العامة لا تتطلب حساب تاجر.
+  if(publicContestId){initPublicContest();return;}
+  const params=new URLSearchParams(location.hash.slice(1));
+  if(params.get('type')==='recovery'){recovery=true;showAuth('recovery');}
+  else if(params.get('error')){showAuth('login');notice('authMsg','رابط تأكيد البريد غير صالح أو انتهت صلاحيته.','error');}
 });
-</script></body></html>
+</script>
+</body>
+</html>
